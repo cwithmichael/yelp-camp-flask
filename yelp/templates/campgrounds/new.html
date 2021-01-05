@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>New Campground</title>
-    </head>
-
-    <body>
+{% extends "campgrounds/base.html" %}
+{% block title %}Add Campground{% endblock %}
+{% block content %}
       <h1>Add a campground!</h1>
       <form  action="/campgrounds" method="POST">
 	{{ form.csrf_token }}
@@ -23,5 +17,4 @@
 	  </div>
       </form>
       <a href="/campgrounds"> All Campgrounds</a>
-    </body>
-</html>
+{% endblock %}

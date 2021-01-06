@@ -4,29 +4,29 @@
 <div class="row mb-3">
   <h1 class="text-center">Add a campground!</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds" method="POST">
+    <form action="/campgrounds" method="POST" novalidate class="validated-form">
       {{ form.csrf_token }}
       <div class="mb-3">
 	<label for="title" class="form-label">Title</label>
-	{{ form.title(class_="form-control")  }}
+	{{ form.title(class_="form-control", required="")  }}
       </div>
       <div class="mb-3">
 	<label for="location" class="form-label">Location</label>
-	{{ form.location(class_="form-control") }}
+	{{ form.location(class_="form-control", required="") }}
       </div>
       <div class="mb-3">
 	<label for="image" class="form-label">Image Url</label>
-	{{ form.image(class_="form-control") }}
+	{{ form.image(class_="form-control", required="") }}
       </div>
       <div class="mb-3">
 	<label for="description" class="form-label">Description</label>
-	{{ form.description(class_="form-control", type="text") }}
+	{{ form.description(class_="form-control", type="text", required="") }}
       </div>
       <div class="mb-3">
 	<label for="price" class="form-label">Campground Price</label>
 	<div class="input-group">
 	  <span class="input-group-text" id="price-label">$</span>
-	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label") }}
+	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label", required="") }}
 	</div>
       </div>
       <div class="mb-3">
@@ -36,4 +36,5 @@
     <a href="/campgrounds"> All Campgrounds</a>
   </div>
 </div>
+
 {% endblock %}

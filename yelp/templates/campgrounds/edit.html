@@ -4,30 +4,30 @@
 <div class="row mb-3">
   <h1 class="text-center">Edit Campground</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds/{{ camp.id }}" method="POST">
+    <form action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form">
       {{ form.csrf_token }}
       <input type="hidden" name="method" value="put">
       <div class="mb-3">
 	<label for="title" class="form-label">Title</label>
-	{{ form.title(class_="form-control", value=camp.title)  }}
+	{{ form.title(class_="form-control", value=camp.title, required="")  }}
       </div>
       <div class="mb-3">
 	<label for="location" class="form-label">Location</label>
-	{{ form.location(class_="form-control", value=camp.location) }}
+	{{ form.location(class_="form-control", value=camp.location, required="") }}
       </div>
       <div class="mb-3">
 	<label for="image" class="form-label">Image Url</label>
-	{{ form.image(class_="form-control", value=camp.image) }}
+	{{ form.image(class_="form-control", value=camp.image, required="") }}
       </div>
       <div class="mb-3">
 	<label for="description" class="form-label">Description</label>
-	{{ form.description(class_="form-control", id="desc") }}
+	{{ form.description(class_="form-control", id="desc", required="") }}
       </div>
       <div class="mb-3">
 	<label for="price" class="form-label">Campground Price</label>
 	<div class="input-group">
 	  <span class="input-group-text" id="price-label">$</span>
-	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label", value=camp.price) }}
+	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label", value=camp.price, required="") }}
 	</div>
       </div>
       <div class="mb-3">

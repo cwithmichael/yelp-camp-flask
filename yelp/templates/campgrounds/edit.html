@@ -1,23 +1,41 @@
 {% extends "campgrounds/base.html" %}
 {% block title %}Edit Campground{% endblock %}
 {% block content %}
-    <h1>Edit Campground</h1>
-    <form id="myForm"  action="/campgrounds/{{ camp.id }}" method="POST">
+<div class="row mb-3">
+  <h1 class="text-center">Edit Campground</h1>
+  <div class="col-6 offset-3">
+    <form action="/campgrounds/{{ camp.id }}" method="POST">
       {{ form.csrf_token }}
-      <div>
-	<label for="title">Title</label>
-	{{ form.title  }}
-      </div>
-      <div>
-	<label for="location">Location</label>
-	{{ form.location  }}
-      </div>
       <input type="hidden" name="method" value="put">
-      <div>
-	<button id="updateCamp">Update Campground</button>
+      <div class="mb-3">
+	<label for="title" class="form-label">Title</label>
+	{{ form.title(class_="form-control", value=camp.title)  }}
+      </div>
+      <div class="mb-3">
+	<label for="location" class="form-label">Location</label>
+	{{ form.location(class_="form-control", value=camp.location) }}
+      </div>
+      <div class="mb-3">
+	<label for="image" class="form-label">Image Url</label>
+	{{ form.image(class_="form-control", value=camp.image) }}
+      </div>
+      <div class="mb-3">
+	<label for="description" class="form-label">Description</label>
+	{{ form.description(class_="form-control", id="desc") }}
+      </div>
+      <div class="mb-3">
+	<label for="price" class="form-label">Campground Price</label>
+	<div class="input-group">
+	  <span class="input-group-text" id="price-label">$</span>
+	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label", value=camp.price) }}
+	</div>
+      </div>
+      <div class="mb-3">
+	<button class="btn btn-success">Update Campground</button>
       </div>
     </form>
-    <a href="/campgrounds/{{camp.id}}"> Back to Campground</a>
-  </body>
-</html>
+    <a href="/campgrounds/{{ camp.id }}"> Back to Campground</a>
+  </div>
+</div>
+<script>document.getElementById('desc').value="{{ camp.description }}";</script>
 {% endblock %}

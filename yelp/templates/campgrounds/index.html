@@ -2,10 +2,24 @@
 {% block title %}Campgrounds{% endblock %}
 {% block content %}
 <h1>All Campgrounds</h1>
-      <a href="campgrounds/new">Add Campground</a>
-      <ul>
-	{% for campground in campgrounds %}
-	<li><a href="/campgrounds/{{campground.id}}"> {{ campground.title }} </a></li>
-	{% endfor %}
-      </ul>
+<a href="campgrounds/new">Add Campground</a>
+{% for campground in campgrounds %}
+<div class="card mb-3">
+  <div class="row">
+    <div class="col-md-4">
+      <img class="img-fluid" alt="" src="{{ campground.image }}">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+	<h5 class="card-title">{{ campground.title }}</h5>
+	<p class="card-text"> {{ campground.description }}</p>
+	<p class="card-text">
+	  <small class="text-muted">{{ campground.location }}</small>
+	</p>
+	<a class="btn btn-primary" href="/campgrounds/{{ campground.id }}">View</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}

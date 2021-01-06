@@ -1,20 +1,39 @@
 {% extends "campgrounds/base.html" %}
 {% block title %}Add Campground{% endblock %}
 {% block content %}
-      <h1>Add a campground!</h1>
-      <form  action="/campgrounds" method="POST">
-	{{ form.csrf_token }}
-	<div>
-	  <label for="title">Title</label>
-	  {{ form.title  }}
+<div class="row mb-3">
+  <h1 class="text-center">Add a campground!</h1>
+  <div class="col-6 offset-3">
+    <form action="/campgrounds" method="POST">
+      {{ form.csrf_token }}
+      <div class="mb-3">
+	<label for="title" class="form-label">Title</label>
+	{{ form.title(class_="form-control")  }}
+      </div>
+      <div class="mb-3">
+	<label for="location" class="form-label">Location</label>
+	{{ form.location(class_="form-control") }}
+      </div>
+      <div class="mb-3">
+	<label for="image" class="form-label">Image Url</label>
+	{{ form.image(class_="form-control") }}
+      </div>
+      <div class="mb-3">
+	<label for="description" class="form-label">Description</label>
+	{{ form.description(class_="form-control", type="text") }}
+      </div>
+      <div class="mb-3">
+	<label for="price" class="form-label">Campground Price</label>
+	<div class="input-group">
+	  <span class="input-group-text" id="price-label">$</span>
+	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label") }}
 	</div>
-	<div>
-	  <label for="location">Location</label>
-	  {{ form.location  }}
-	</div>
-	<div>
-	  <button type='submit'>Add Campground</button>
-	  </div>
-      </form>
-      <a href="/campgrounds"> All Campgrounds</a>
+      </div>
+      <div class="mb-3">
+	<button class="btn btn-success">Add Campground</button>
+      </div>
+    </form>
+    <a href="/campgrounds"> All Campgrounds</a>
+  </div>
+</div>
 {% endblock %}

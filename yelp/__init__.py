@@ -6,8 +6,10 @@ import mongoengine
 from .models.campground import Campground
 from .forms.camp import NewCampForm
 import wtforms
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+load_dotenv()
 app.config.update({
     "SECRET_KEY":os.getenv("SECRET_KEY", None)
 })

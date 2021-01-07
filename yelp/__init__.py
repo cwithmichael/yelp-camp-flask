@@ -4,7 +4,8 @@ from flask import request, url_for, redirect, render_template
 from flask_mongoengine import MongoEngine
 import mongoengine
 from .models.campground import Campground
-from .forms.camp import NewCampForm
+from .models.review import Review
+from .forms.camp import NewCampForm, ReviewForm
 import wtforms
 from dotenv import load_dotenv
 
@@ -37,7 +38,8 @@ def campgrounds():
 @app.route('/campgrounds/<camp_id>', methods=['GET'])
 def show_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
-    return render_template('campgrounds/show.html', camp=camp)
+    form = ReviewForm(request.form)
+    return render_template('campgrounds/show.html', camp=camp, form=form)
 
 @app.route('/campgrounds/<camp_id>', methods=['POST', 'PUT', 'DELETE'])
 def modify_campground(camp_id):
@@ -51,6 +53,8 @@ def modify_campground(camp_id):
         camp.save()
         return redirect(url_for('show_campground', camp_id=camp_id), code=303)
     elif request.form["method"] == "delete":
+        for review in camp.reviews:
+            review.delete()
         camp.delete()
         return redirect(url_for('campgrounds'))
     return 'bad request!', 400
@@ -66,8 +70,27 @@ def new_campground():
     form = NewCampForm(request.form)
     return render_template('campgrounds/new.html', form=form)
 
+@app.route('/campgrounds/<camp_id>/reviews', methods=['POST'])
+def show_reviews(camp_id):
+    camp = Campground.objects.get(id=camp_id)
+    review = Review(body=request.form["body"], rating=request.form["rating"])
+    camp.reviews.append(review)
+    review.save()
+    camp.save()
+    return redirect(url_for('show_campground', camp_id=camp_id))
+
+@app.route('/campgrounds/<camp_id>/reviews/<review_id>', methods=['POST', 'DELETE'])
+def modify_review(camp_id, review_id):
+    camp = Campground.objects.get(id=camp_id)
+    review = Review.objects.get(id=review_id)
+    if request.form["method"] == "delete":
+        camp.update(pull__reviews=review)
+        review.delete()
+    return redirect(url_for('show_campground', camp_id=camp_id))
+
 @app.errorhandler(mongoengine.errors.ValidationError)
 def handle_bad_mongo_validation(e):
+    print(e)
     return render_template('error.html', error_message="Invalid Campground Data"), 400
 
 @app.errorhandler(404)

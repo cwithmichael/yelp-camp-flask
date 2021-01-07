@@ -1,4 +1,5 @@
 import mongoengine as me
+from .review import Review
 
 def _not_empty(val):
     if not val:
@@ -10,5 +11,5 @@ class Campground(me.Document):
     price = me.DecimalField(required=True, validation=_not_empty)
     description = me.StringField(required=True, validation=_not_empty)
     location = me.StringField(required=True, validation=_not_empty)
-    
+    reviews = me.ListField(me.ReferenceField(Review))
     

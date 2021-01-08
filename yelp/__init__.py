@@ -28,6 +28,9 @@ def create_app(test_config=None):
 
     from . import campgrounds
     app.register_blueprint(campgrounds.bp)
+
+    from . import reviews
+    app.register_blueprint(reviews.bp)
     
     @app.route('/')
     def index():

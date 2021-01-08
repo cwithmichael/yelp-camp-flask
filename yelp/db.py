@@ -1,7 +1,11 @@
-import random
+from flask import current_app, g
+from flask.cli import with_appcontext
 from seed.seedhelpers import descriptors, places
 from seed.cities import cities
 from yelp.models import campground
+from flask_mongoengine import MongoEngine
+import click
+import random
 
 sample = lambda array: array[random.randint(0, len(array)-1)]
 
@@ -24,5 +28,13 @@ def seed_db():
         )
         camp.save()
 
-if __name__=='__main__':
+@click.command('seed-db')
+@with_appcontext
+def seed_db_command():
+    """Clear the existing date and create new collection"""
     seed_db()
+    click.echo('Seeded the database.')
+
+def init_app(app):
+    db = MongoEngine(app)
+    app.cli.add_command(seed_db_command)

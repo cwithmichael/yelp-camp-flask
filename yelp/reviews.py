@@ -10,14 +10,15 @@ import wtforms
 
 bp = Blueprint('reviews', __name__, url_prefix='/campgrounds/<camp_id>/reviews')
 
-@bp.route('/', methods=['POST'])
-def show_reviews(camp_id):
+@bp.route('', methods=['POST'])
+def add_review(camp_id):
     camp = Campground.objects.get(id=camp_id)
     review = Review(body=request.form["body"], rating=request.form["rating"])
     camp.reviews.append(review)
     review.save()
     camp.save()
-    return redirect(url_for('show_campground', camp_id=camp_id))
+    flash("Review saved successfully", "success")
+    return redirect(url_for('campgrounds.show_campground', camp_id=camp_id))
 
 @bp.route('/<review_id>', methods=['POST', 'DELETE'])
 def modify_review(camp_id, review_id):
@@ -26,4 +27,5 @@ def modify_review(camp_id, review_id):
     if request.form["method"] == "delete":
         camp.update(pull__reviews=review)
         review.delete()
-    return redirect(url_for('show_campground', camp_id=camp_id))
+    flash("Review deleted", "success")
+    return redirect(url_for('campgrounds.show_campground', camp_id=camp_id))

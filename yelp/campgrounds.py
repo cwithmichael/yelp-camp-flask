@@ -23,11 +23,17 @@ def campgrounds():
         price=request.form.get("price", None),
     )
     camp.save()
-    return redirect(url_for('show_campground', camp_id=str(camp.id)))
+    flash("The campground was added successfully", "success")
+    return redirect(url_for('campgrounds.show_campground', camp_id=str(camp.id)))
 
 @bp.route('/<camp_id>', methods=['GET'])
 def show_campground(camp_id):
-    camp = Campground.objects.get(id=camp_id)
+    camp = None
+    try:
+        camp = Campground.objects.get(id=camp_id)
+    except:
+        flash("Cannot find that campground", "error")
+        return redirect(url_for('campgrounds.campgrounds'))
     form = ReviewForm(request.form)
     return render_template('campgrounds/show.html', camp=camp, form=form)
 
@@ -41,12 +47,14 @@ def modify_campground(camp_id):
         camp.description = request.form.get("description", None)
         camp.price = request.form.get("price", None)
         camp.save()
-        return redirect(url_for('show_campground', camp_id=camp_id), code=303)
+        flash("Campground updated!", "success")
+        return redirect(url_for('campgrounds.show_campground', camp_id=camp_id), code=303)
     elif request.form["method"] == "delete":
         for review in camp.reviews:
             review.delete()
             camp.delete()
-        return redirect(url_for('campgrounds'))
+        flash("Campground deleted", "success")
+        return redirect(url_for('campgrounds.campgrounds'))
     return 'bad request!', 400
 
 @bp.route('/<camp_id>/edit')
@@ -59,21 +67,3 @@ def edit_campground(camp_id):
 def new_campground():
     form = NewCampForm(request.form)
     return render_template('campgrounds/new.html', form=form)
-
-@bp.route('/<camp_id>/reviews', methods=['POST'])
-def show_reviews(camp_id):
-    camp = Campground.objects.get(id=camp_id)
-    review = Review(body=request.form["body"], rating=request.form["rating"])
-    camp.reviews.append(review)
-    review.save()
-    camp.save()
-    return redirect(url_for('show_campground', camp_id=camp_id))
-
-@bp.route('/<camp_id>/reviews/<review_id>', methods=['POST', 'DELETE'])
-def modify_review(camp_id, review_id):
-    camp = Campground.objects.get(id=camp_id)
-    review = Review.objects.get(id=review_id)
-    if request.form["method"] == "delete":
-        camp.update(pull__reviews=review)
-        review.delete()
-    return redirect(url_for('show_campground', camp_id=camp_id))

@@ -8,7 +8,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     load_dotenv()
     app.config.from_mapping(
-        SECRET_KEY = os.getenv("SECRET_KEY", None)
+        SECRET_KEY = os.getenv("SECRET_KEY", b'_5#secret')
     )
 
     if test_config is None:
@@ -34,7 +34,7 @@ def create_app(test_config=None):
     
     @app.route('/')
     def index():
-        return redirect(url_for('campgrounds'))
+        return redirect('/campgrounds')
 
     @app.errorhandler(mongoengine.errors.ValidationError)
     def handle_bad_mongo_validation(e):

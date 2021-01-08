@@ -7,7 +7,8 @@ from flask_mongoengine import MongoEngine
 import click
 import random
 
-sample = lambda array: array[random.randint(0, len(array)-1)]
+sample = lambda array: array[random.randint(0, len(array) - 1)]
+
 
 def seed_db():
     camp = campground.Campground.objects.first()
@@ -24,16 +25,18 @@ def seed_db():
             title=f"{descriptor} {place}",
             image="https://source.unsplash.com/collection/483251",
             description="This is a description.",
-            price= (random.random() * 20) + 10,
+            price=(random.random() * 20) + 10,
         )
         camp.save()
 
-@click.command('seed-db')
+
+@click.command("seed-db")
 @with_appcontext
 def seed_db_command():
     """Clear the existing date and create new collection"""
     seed_db()
-    click.echo('Seeded the database.')
+    click.echo("Seeded the database.")
+
 
 def init_app(app):
     db = MongoEngine(app)

@@ -3,13 +3,15 @@ from wtforms import StringField, DecimalField, TextAreaField
 from wtforms.validators import DataRequired, NumberRange
 from wtforms.fields.html5 import IntegerRangeField
 
+
 class NewCampForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    location = StringField('Location', validators=[DataRequired()])
-    image = StringField('Image', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    price = DecimalField('Price', validators=[DataRequired()])
+    title = StringField("Title", validators=[DataRequired()])
+    location = StringField("Location", validators=[DataRequired()])
+    image = StringField("Image", validators=[DataRequired()])
+    description = TextAreaField("Description", validators=[DataRequired()])
+    price = DecimalField("Price", validators=[DataRequired()])
+
 
 class ReviewForm(FlaskForm):
-    rating = IntegerRangeField('Rating')
-    body = TextAreaField('Body', validators=[DataRequired()])
+    rating = IntegerRangeField("Rating")
+    body = TextAreaField("Body", validators=[DataRequired()])

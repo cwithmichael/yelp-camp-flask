@@ -1,10 +1,12 @@
 import mongoengine as me
 from .review import Review
 
+
 def _not_empty(val):
     if not val:
-        raise me.ValidationError('value can not be empty')
-    
+        raise me.ValidationError("value can not be empty")
+
+
 class Campground(me.Document):
     title = me.StringField(required=True, validation=_not_empty)
     image = me.StringField(required=True, validation=_not_empty)
@@ -12,4 +14,3 @@ class Campground(me.Document):
     description = me.StringField(required=True, validation=_not_empty)
     location = me.StringField(required=True, validation=_not_empty)
     reviews = me.ListField(me.ReferenceField(Review))
-    

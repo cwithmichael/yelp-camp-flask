@@ -10,9 +10,10 @@ from flask import (
     session,
     url_for,
 )
-from .models.campground import Campground
-from .models.review import Review
-from .forms.camp import ReviewForm
+from yelp.auth import login_required
+from yelp.models.campground import Campground
+from yelp.models.review import Review
+from yelp.forms.camp import ReviewForm
 import wtforms
 
 bp = Blueprint("reviews", __name__, url_prefix="/campgrounds/<camp_id>/reviews")

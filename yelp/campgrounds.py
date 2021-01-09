@@ -10,19 +10,23 @@ from flask import (
     session,
     url_for,
 )
-from .models.campground import Campground
-from .models.review import Review
-from .forms.camp import NewCampForm, ReviewForm
+from yelp.auth import login_required
+from yelp.models.campground import Campground
+from yelp.models.review import Review
+from yelp.forms.camp import NewCampForm, ReviewForm
 import wtforms
 
 bp = Blueprint("campgrounds", __name__, url_prefix="/campgrounds")
 
 
-@bp.route("/", methods=["GET", "POST"])
+@bp.route("/", methods=["GET"])
 def campgrounds():
-    if request.method == "GET":
-        campgrounds = Campground.objects
-        return render_template("campgrounds/index.html", campgrounds=campgrounds)
+    campgrounds = Campground.objects
+    return render_template("campgrounds/index.html", campgrounds=campgrounds)
+
+@bp.route("/", methods=["POST"])
+@login_required
+def add_campground():
     camp = Campground(
         title=request.form.get("title", None),
         location=request.form.get("location", None),
@@ -33,7 +37,6 @@ def campgrounds():
     camp.save()
     flash("The campground was added successfully", "success")
     return redirect(url_for("campgrounds.show_campground", camp_id=str(camp.id)))
-
 
 @bp.route("/<camp_id>", methods=["GET"])
 def show_campground(camp_id):
@@ -48,6 +51,7 @@ def show_campground(camp_id):
 
 
 @bp.route("/<camp_id>", methods=["POST", "PUT", "DELETE"])
+@login_required
 def modify_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
     if request.form["method"] == "put":
@@ -71,6 +75,7 @@ def modify_campground(camp_id):
 
 
 @bp.route("/<camp_id>/edit")
+@login_required
 def edit_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
     form = NewCampForm(request.form, title=camp.title, location=camp.location)
@@ -78,6 +83,7 @@ def edit_campground(camp_id):
 
 
 @bp.route("/new")
+@login_required
 def new_campground():
     form = NewCampForm(request.form)
     return render_template("campgrounds/new.html", form=form)

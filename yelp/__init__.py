@@ -34,6 +34,9 @@ def create_app(test_config=None):
 
     app.register_blueprint(reviews.bp)
 
+    from . import auth
+    app.register_blueprint(auth.bp)
+    
     @app.route("/")
     def index():
         return redirect("/campgrounds")

@@ -1,8 +1,8 @@
-{% extends "campgrounds/base.html" %}
+{% extends "base.html" %}
 {% block title %}Campgrounds{% endblock %}
 {% block content %}
 <h1>All Campgrounds</h1>
-<a href="campgrounds/new">Add Campground</a>
+<a href="/campgrounds/new">Add Campground</a>
 {% for campground in campgrounds %}
 <div class="card mb-3">
   <div class="row">

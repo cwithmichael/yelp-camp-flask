@@ -99,6 +99,7 @@ def load_logged_in_user():
         except:
             g.user = None
 
+
 def login_required(view):
     @functools.wraps(view)
     def authentication_wrapped_view(**kwargs):

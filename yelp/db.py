@@ -2,7 +2,7 @@ from flask import current_app, g
 from flask.cli import with_appcontext
 from seed.seedhelpers import descriptors, places
 from seed.cities import cities
-from yelp.models import campground
+from yelp.models import campground, user, review
 from flask_mongoengine import MongoEngine
 import click
 import random
@@ -12,9 +12,11 @@ sample = lambda array: array[random.randint(0, len(array) - 1)]
 
 
 def seed_db():
-    camp = campground.Campground.objects.first()
-    if camp:
-        camp.drop_collection()
+    user.User.drop_collection()
+    review.Review.drop_collection()
+    campground.Campground.drop_collection()
+    user.User(email="fake@fake.com", username="fake", password="fake").save()
+    author = user.User.objects.first()
     for i in range(50):
         rando = random.randint(0, 1000)
         city = cities[rando]["city"]
@@ -28,12 +30,12 @@ def seed_db():
                 campground.Image(
                     url="https://source.unsplash.com/collection/483251",
                     filename="camp.jpg",
-                    thumbnail_url="",
+                    thumbnail_url="https://source.unsplash.com/collection/483251",
                 )
             ],
             description="This is a description.",
             price=(random.random() * 20) + 10,
-            author=ObjectId("5ff9d567b81b391c9a857b64"),
+            author=author.id,
         )
         camp.save()
 

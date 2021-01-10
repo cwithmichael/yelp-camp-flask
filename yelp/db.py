@@ -1,12 +1,13 @@
 from flask import current_app, g
 from flask.cli import with_appcontext
-from seed.seedhelpers import descriptors, places
-from seed.cities import cities
-from yelp.models import campground, user, review
 from flask_mongoengine import MongoEngine
 import click
 import random
 from bson.objectid import ObjectId
+from werkzeug.security import generate_password_hash
+from seed.seedhelpers import descriptors, places
+from seed.cities import cities
+from yelp.models import campground, user, review
 
 sample = lambda array: array[random.randint(0, len(array) - 1)]
 
@@ -15,7 +16,8 @@ def seed_db():
     user.User.drop_collection()
     review.Review.drop_collection()
     campground.Campground.drop_collection()
-    user.User(email="fake@fake.com", username="fake", password="fake").save()
+    hashed_pw = generate_password_hash("fake")
+    user.User(email="fake@fake.com", username="fake", password=hashed_pw).save()
     author = user.User.objects.first()
     for i in range(50):
         rando = random.randint(0, 1000)

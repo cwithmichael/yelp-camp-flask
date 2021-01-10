@@ -83,7 +83,7 @@ def modify_campground(camp_id):
     elif request.form["method"] == "delete":
         for review in camp.reviews:
             review.delete()
-            camp.delete()
+        camp.delete()
         flash("Campground deleted", "success")
         return redirect(url_for("campgrounds.campgrounds"))
     return "bad request!", 400

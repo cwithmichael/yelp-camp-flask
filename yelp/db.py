@@ -28,6 +28,7 @@ def seed_db():
                 campground.Image(
                     url="https://source.unsplash.com/collection/483251",
                     filename="camp.jpg",
+                    thumbnail_url="",
                 )
             ],
             description="This is a description.",

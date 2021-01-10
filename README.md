@@ -4,6 +4,8 @@ This project is based off of the wonderful YelpCamp project presented in the [We
 The original project uses Node.js and Express. I decided to do the project with Python and Flask. The front-end is mostly the same. There weren't huge differences between ejs and jinja templates.
 The back-end has a few changes, but I tried to stay as faithul to the original course project as possible.
 
+The original project can be found [here](https://github.com/Colt/YelpCamp).
+
 ## Requirements
 - Python 3.9.1
 

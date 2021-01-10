@@ -94,8 +94,10 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User.objects.get(id=user_id)
-
+        try:
+            g.user = User.objects.get(id=user_id)
+        except:
+            g.user = None
 
 def login_required(view):
     @functools.wraps(view)
@@ -104,7 +106,6 @@ def login_required(view):
             flash("You must be signed in to view this page.", "error")
             session["prev_view"] = request.referrer
             return redirect(url_for("auth.login"))
-
         return view(**kwargs)
 
     return authentication_wrapped_view

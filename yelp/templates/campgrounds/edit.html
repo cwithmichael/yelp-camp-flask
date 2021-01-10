@@ -4,7 +4,7 @@
 <div class="row mb-3">
   <h1 class="text-center">Edit Campground</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form">
+    <form action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
       {{ form.csrf_token }}
       <input type="hidden" name="method" value="put">
       <div class="mb-3">
@@ -16,10 +16,6 @@
 	{{ form.location(class_="form-control", value=camp.location, required="") }}
       </div>
       <div class="mb-3">
-	<label for="image" class="form-label">Image Url</label>
-	{{ form.image(class_="form-control", value=camp.image, required="") }}
-      </div>
-      <div class="mb-3">
 	<label for="description" class="form-label">Description</label>
 	{{ form.description(class_="form-control", id="desc", required="") }}
       </div>
@@ -29,6 +25,19 @@
 	  <span class="input-group-text" id="price-label">$</span>
 	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label", value=camp.price, required="") }}
 	</div>
+      </div>
+      <div class="mb-3">
+	<label for="image" class="form-label custom-file-label">Add image(s)...</label>
+	<input type="file" class="form-control" id="image" name="image" multiple>
+      </div>
+      <div class="mb-3">
+	{% for idx in range(camp.images|count) %}
+	<img src="{{camp.images[idx].thumbnail_url}}" alt="" class="img-thumbnail">
+	<div class="form-check">
+	  <input class="form-check-input" type="checkbox" name="images_to_delete" value="{{camp.images[idx].filename}}" id="imageCheck" />
+	  <label class="form-check-label" for="imageCheck" for="">Delete?</label>
+	</div>
+	{% endfor %}
       </div>
       <div class="mb-3">
 	<button class="btn btn-success">Update Campground</button>

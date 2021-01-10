@@ -11,6 +11,7 @@ from flask import (
     url_for,
 )
 from cloudinary.uploader import upload
+from cloudinary.api import delete_resources
 from cloudinary.utils import cloudinary_url
 from yelp.auth import login_required, campground_ownership_required
 from yelp.models.campground import Campground, Image
@@ -31,15 +32,7 @@ def campgrounds():
 @login_required
 def add_campground():
     upload_result = None
-    image_results = []
-    for name, file in request.files.items(multi=True):
-        file_to_upload = file
-        if file_to_upload:
-            upload_result = upload(file_to_upload, folder="yelp_camp")
-            image_results.append(
-                Image(url=upload_result["url"], filename=file_to_upload.filename)
-            )
-
+    image_results = upload_images_to_cloudinary(request.files)
     camp = Campground(
         title=request.form.get("title", None),
         location=request.form.get("location", None),
@@ -70,13 +63,19 @@ def show_campground(camp_id):
 @campground_ownership_required
 def modify_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
+    image_results = upload_images_to_cloudinary(request.files)
     if request.form["method"] == "put":
         camp.title = request.form.get("title", None)
         camp.location = request.form.get("location", None)
-        camp.image = request.form.get("image", None)
+        camp.images = [*camp.images, *image_results]
         camp.description = request.form.get("description", None)
         camp.price = request.form.get("price", None)
         camp.save()
+        deleted_images = request.form.items(multi=True)
+        for key, value in deleted_images:
+            if key == "images_to_delete":
+                camp.update(pull__images__filename=value)
+                delete_resources(value)
         flash("Campground updated!", "success")
         return redirect(
             url_for("campgrounds.show_campground", camp_id=camp_id), code=303
@@ -104,3 +103,26 @@ def edit_campground(camp_id):
 def new_campground():
     form = NewCampForm(request.form)
     return render_template("campgrounds/new.html", form=form)
+
+
+def upload_images_to_cloudinary(request_files):
+    image_results = []
+    for name, file in request_files.items(multi=True):
+        file_to_upload = file
+        if file_to_upload:
+            upload_result = upload(file_to_upload, folder="yelp_camp")
+            thumbnail_url, options = cloudinary_url(
+                upload_result["public_id"],
+                format="jpg",
+                crop="fill",
+                width=200,
+                height=200,
+            )
+            image_results.append(
+                Image(
+                    url=upload_result["url"],
+                    filename=upload_result["public_id"],
+                    thumbnail_url=thumbnail_url,
+                )
+            )
+    return image_results

@@ -11,6 +11,7 @@ def _not_empty(val):
 class Image(me.EmbeddedDocument):
     url = me.StringField(required=True)
     filename = me.StringField(required=True)
+    thumbnail_url = me.StringField(required=True)
 
 
 class Campground(me.Document):

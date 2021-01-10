@@ -4,10 +4,26 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/starability-heart.min.css')}}" type="text/css" media="screen" />
 <div class="row">
   <div class="col-6">
+    <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+	{% for idx in range(camp.images|count) %}
+	<div class="carousel-item {% if idx == 0 %}active{% endif %}">
+	  <img src="{{camp.images[idx].url}}" class="d-block w-100" alt="...">
+	</div>
+	{% endfor %}
+      </div>
+      {% if camp.images|count > 1 %}
+      <a class="carousel-control-prev" href="#campgroundCarousel" role="button" data-bs-slide="prev">
+	<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	<span class="visually-hidden">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#campgroundCarousel" role="button" data-bs-slide="next">
+	<span class="carousel-control-next-icon" aria-hidden="true"></span>
+	<span class="visually-hidden">Next</span>
+      </a>
+      {% endif %}
+    </div>
     <div class="card mb-3">
-      {% for image in camp.images %}
-      <img src="{{ image.url }}" class="card-img-top" alt="">
-      {% endfor %}
       <div class="card-body">
 	<h5 class="card-title">{{ camp.title }}</h5>
 	<p class="card-text"> {{ camp.description }} </p>

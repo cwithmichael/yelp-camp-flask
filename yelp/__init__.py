@@ -43,12 +43,15 @@ def create_app(test_config=None):
 
     @app.errorhandler(mongoengine.errors.ValidationError)
     def handle_bad_mongo_validation(e):
-        print(e)
         return (
             render_template("error.html", error_message="Something went wrong with your request"),
             400,
         )
 
+    @app.errorhandler(ValueError)
+    def bad_request(e):
+        return render_template("error.html", error_message="Bad Request"), 400
+    
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template("error.html", error_message="Page Not Found"), 400

@@ -24,24 +24,25 @@ bp = Blueprint("reviews", __name__, url_prefix="/campgrounds/<camp_id>/reviews")
 def add_review(camp_id):
     body = request.form["body"]
     rating = request.form["rating"]
-    if rating:
-        rating = int(rating)
-        if rating <= 0:
-            flash("Rating must be at least 1 star", "error")
-            return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
     if not body or not rating:
-        flash("You can't submit a review without a rating.", "error")
+        flash(
+            "You can't submit an empty review or a review without a rating.", "error")
+        return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
+
+    rating = int(rating)
+    if rating <= 0:
+        flash("Rating must be at least 1 star", "error")
         return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
     
     camp = Campground.objects.get(id=camp_id)
     review = Review(body=request.form["body"], rating=request.form["rating"])
-    review.author = g.user.id
+    if g.user:
+        review.author = g.user.id
     camp.reviews.append(review)
     review.save()
     camp.save()
     flash("Review saved successfully", "success")
     return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
-
 
 @bp.route("/<review_id>", methods=["POST", "DELETE"])
 @login_required

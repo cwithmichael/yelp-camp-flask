@@ -1,6 +1,6 @@
 import mongoengine as me
-from .review import Review
-
+from yelp.models.review import Review
+from yelp.models.user import User
 
 def _not_empty(val):
     if not val:
@@ -14,3 +14,4 @@ class Campground(me.Document):
     description = me.StringField(required=True, validation=_not_empty)
     location = me.StringField(required=True, validation=_not_empty)
     reviews = me.ListField(me.ReferenceField(Review))
+    author = me.ReferenceField(User)

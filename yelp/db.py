@@ -6,6 +6,7 @@ from yelp.models import campground
 from flask_mongoengine import MongoEngine
 import click
 import random
+from bson.objectid import ObjectId
 
 sample = lambda array: array[random.randint(0, len(array) - 1)]
 
@@ -26,6 +27,7 @@ def seed_db():
             image="https://source.unsplash.com/collection/483251",
             description="This is a description.",
             price=(random.random() * 20) + 10,
+            author=ObjectId("5ff9d567b81b391c9a857b64")
         )
         camp.save()
 

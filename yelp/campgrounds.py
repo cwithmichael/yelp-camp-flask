@@ -10,7 +10,7 @@ from flask import (
     session,
     url_for,
 )
-from yelp.auth import login_required
+from yelp.auth import login_required, campground_ownership_required
 from yelp.models.campground import Campground
 from yelp.models.review import Review
 from yelp.forms.camp import NewCampForm, ReviewForm
@@ -18,13 +18,12 @@ import wtforms
 
 bp = Blueprint("campgrounds", __name__, url_prefix="/campgrounds")
 
-
 @bp.route("/", methods=["GET"])
 def campgrounds():
     campgrounds = Campground.objects
     return render_template("campgrounds/index.html", campgrounds=campgrounds)
 
-@bp.route("/", methods=["POST"])
+@bp.route("", methods=["POST"])
 @login_required
 def add_campground():
     camp = Campground(
@@ -33,6 +32,7 @@ def add_campground():
         image=request.form.get("image", None),
         description=request.form.get("description", None),
         price=request.form.get("price", None),
+        author = session.get("user_id", None)
     )
     camp.save()
     flash("The campground was added successfully", "success")
@@ -52,6 +52,7 @@ def show_campground(camp_id):
 
 @bp.route("/<camp_id>", methods=["POST", "PUT", "DELETE"])
 @login_required
+@campground_ownership_required
 def modify_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
     if request.form["method"] == "put":
@@ -76,6 +77,7 @@ def modify_campground(camp_id):
 
 @bp.route("/<camp_id>/edit")
 @login_required
+@campground_ownership_required
 def edit_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
     form = NewCampForm(request.form, title=camp.title, location=camp.location)
@@ -87,3 +89,4 @@ def edit_campground(camp_id):
 def new_campground():
     form = NewCampForm(request.form)
     return render_template("campgrounds/new.html", form=form)
+

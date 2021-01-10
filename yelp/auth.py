@@ -5,7 +5,9 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 import mongoengine
-from .models.user import User
+from yelp.models.user import User
+from yelp.models.campground import Campground
+from yelp.models.review import Review
 
 bp = Blueprint('auth', __name__, url_prefix='/')
 
@@ -59,10 +61,11 @@ def login():
         else:
             flash("Successfully logged in", "success")
 
-        from urllib.parse import urlparse
-        parsed = urlparse(prev_view)
-        return redirect(parsed.path)
-
+        if prev_view and prev_view != "register":
+            from urllib.parse import urlparse
+            parsed = urlparse(prev_view)
+            return redirect(parsed.path)
+        return redirect(url_for("campgrounds.campgrounds"))
     flash(error, "error")
     return redirect(url_for("auth.login"))
 
@@ -83,7 +86,7 @@ def load_logged_in_user():
 
 def login_required(view):
     @functools.wraps(view)
-    def wrapped_view(**kwargs):
+    def authentication_wrapped_view(**kwargs):
         if g.user is None:
             flash("You must be signed in to view this page.", "error")
             session["prev_view"] = request.referrer
@@ -91,4 +94,27 @@ def login_required(view):
 
         return view(**kwargs)
 
-    return wrapped_view
+    return authentication_wrapped_view
+
+def campground_ownership_required(view):
+    @functools.wraps(view)
+    def authorization_wrapped_view(**kwargs):
+        camp_id = kwargs.get('camp_id', None)
+        camp = Campground.objects.get(id=camp_id)
+        if g.user and g.user.id != camp.author.id:
+            flash("You do not have permission to do that", "error")
+            return redirect(url_for("campgrounds.modify_campground", camp_id=camp_id))
+        return view(**kwargs)
+    return authorization_wrapped_view
+
+def review_ownership_required(view):
+    @functools.wraps(view)
+    def authorization_wrapped_view(**kwargs):
+        camp_id = kwargs.get('camp_id', None)
+        review_id = kwargs.get('review_id', None)
+        review = Review.objects.get(id=review_id)
+        if g.user and g.user.id != review.author.id:
+            flash("You do not have permission to do that", "error")
+            return redirect(url_for("campgrounds.modify_campground", camp_id=camp_id))
+        return view(**kwargs)
+    return authorization_wrapped_view

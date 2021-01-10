@@ -1,6 +1,4 @@
 import mongoengine as me
-from .review import Review
-
 
 def _not_empty(val):
     if not val:

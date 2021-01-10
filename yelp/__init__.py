@@ -45,7 +45,7 @@ def create_app(test_config=None):
     def handle_bad_mongo_validation(e):
         print(e)
         return (
-            render_template("error.html", error_message="Invalid Campground Data"),
+            render_template("error.html", error_message="Something went wrong with your request"),
             400,
         )
 

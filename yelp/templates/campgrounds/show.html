@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Show{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/starability-heart.min.css')}}" type="text/css" media="screen" />
 <div class="row">
   <div class="col-6">
     <div class="card mb-3">
@@ -35,11 +36,22 @@
     <form action="/campgrounds/{{ camp.id }}/reviews" class="mb-3 validated-form" method="POST" novalidate>
       {{ form.csrf_token }}
       <div class="mb-3">
-	<label class="form-label" for="rating">Rating</label>
-	{{ form.rating(class_="form-range", id="rating", min=1, max=5) }}
+	<fieldset class="starability-heart">
+	  <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="" checked aria-label="No rating." />
+	  <input type="radio" id="first-rate1" name="rating" value="1" />
+	  <label for="first-rate1" title="Terrible">1 star</label>
+	  <input type="radio" id="first-rate2" name="rating" value="2" />
+	  <label for="first-rate2" title="Not good">2 stars</label>
+	  <input type="radio" id="first-rate3" name="rating" value="3" />
+	  <label for="first-rate3" title="Average">3 stars</label>
+	  <input type="radio" id="first-rate4" name="rating" value="4" />
+	  <label for="first-rate4" title="Very good">4 stars</label>
+	  <input type="radio" id="first-rate5" name="rating" value="5" />
+	  <label for="first-rate5" title="Amazing">5 stars</label>
+	</fieldset>
       </div>
       <div class="mb-3">
-	<label class="form-label" for="body">Review</label>
+	<label class="form-label" for="body">Review Text</label>
 	{{ form.body(class_="form-control", id="body", cols=30, rows=3) }}
       </div>
       <div class="valid-feedback">
@@ -51,8 +63,8 @@
     {% for review in camp.reviews %}
     <div class="card mb-3">
       <div class="card-body">
-	<h5 class="card-title">Rating: {{ review.rating }}</h5>
-	<p class="card-subtitle mb-2 text-muted">Author: {{ review.author.username }}</p>
+	<p class="card-title">Author: {{ review.author.username }}</p>
+	<p class="starability-result" data-rating="{{ review. rating }}">
 	<p class="card-text">Review: {{ review.body }}</p>
 	{% if g.user and review.author.id == g.user.id %}
 	<form action="/campgrounds/{{ camp.id }}/reviews/{{ review.id }}" method="POST">

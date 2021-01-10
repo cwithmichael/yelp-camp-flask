@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    load_dotenv()
+
     app.config.from_mapping(SECRET_KEY=os.getenv("SECRET_KEY", b"_5#secret"))
 
     if test_config is None:
@@ -22,6 +22,11 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    # load the environment vars
+    from pathlib import Path
+
+    load_dotenv(dotenv_path=Path(app.instance_path) / ".env")
+
     from . import db
 
     db.init_app(app)

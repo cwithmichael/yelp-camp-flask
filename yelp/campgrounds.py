@@ -10,8 +10,10 @@ from flask import (
     session,
     url_for,
 )
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 from yelp.auth import login_required, campground_ownership_required
-from yelp.models.campground import Campground
+from yelp.models.campground import Campground, Image
 from yelp.models.review import Review
 from yelp.forms.camp import NewCampForm, ReviewForm
 import wtforms
@@ -28,10 +30,20 @@ def campgrounds():
 @bp.route("", methods=["POST"])
 @login_required
 def add_campground():
+    upload_result = None
+    image_results = []
+    for name, file in request.files.items(multi=True):
+        file_to_upload = file
+        if file_to_upload:
+            upload_result = upload(file_to_upload, folder="yelp_camp")
+            image_results.append(
+                Image(url=upload_result["url"], filename=file_to_upload.filename)
+            )
+
     camp = Campground(
         title=request.form.get("title", None),
         location=request.form.get("location", None),
-        image=request.form.get("image", None),
+        images=image_results,
         description=request.form.get("description", None),
         price=request.form.get("price", None),
         author=session.get("user_id", None),

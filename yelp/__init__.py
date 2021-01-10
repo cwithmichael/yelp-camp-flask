@@ -35,8 +35,9 @@ def create_app(test_config=None):
     app.register_blueprint(reviews.bp)
 
     from . import auth
+
     app.register_blueprint(auth.bp)
-    
+
     @app.route("/")
     def index():
         return redirect("/campgrounds")
@@ -44,14 +45,16 @@ def create_app(test_config=None):
     @app.errorhandler(mongoengine.errors.ValidationError)
     def handle_bad_mongo_validation(e):
         return (
-            render_template("error.html", error_message="Something went wrong with your request"),
+            render_template(
+                "error.html", error_message="Something went wrong with your request"
+            ),
             400,
         )
 
     @app.errorhandler(ValueError)
     def bad_request(e):
         return render_template("error.html", error_message="Bad Request"), 400
-    
+
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template("error.html", error_message="Page Not Found"), 400

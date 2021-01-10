@@ -27,7 +27,7 @@ def seed_db():
             image="https://source.unsplash.com/collection/483251",
             description="This is a description.",
             price=(random.random() * 20) + 10,
-            author=ObjectId("5ff9d567b81b391c9a857b64")
+            author=ObjectId("5ff9d567b81b391c9a857b64"),
         )
         camp.save()
 

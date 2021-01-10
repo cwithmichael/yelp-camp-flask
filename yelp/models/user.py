@@ -1,5 +1,6 @@
 import mongoengine as me
 
+
 def _not_empty(val):
     if not val:
         raise me.ValidationError("value can not be empty")

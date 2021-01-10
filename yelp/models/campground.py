@@ -2,6 +2,7 @@ import mongoengine as me
 from yelp.models.review import Review
 from yelp.models.user import User
 
+
 def _not_empty(val):
     if not val:
         raise me.ValidationError("value can not be empty")

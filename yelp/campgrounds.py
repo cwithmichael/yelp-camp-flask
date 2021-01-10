@@ -18,10 +18,12 @@ import wtforms
 
 bp = Blueprint("campgrounds", __name__, url_prefix="/campgrounds")
 
+
 @bp.route("/", methods=["GET"])
 def campgrounds():
     campgrounds = Campground.objects
     return render_template("campgrounds/index.html", campgrounds=campgrounds)
+
 
 @bp.route("", methods=["POST"])
 @login_required
@@ -32,11 +34,12 @@ def add_campground():
         image=request.form.get("image", None),
         description=request.form.get("description", None),
         price=request.form.get("price", None),
-        author = session.get("user_id", None)
+        author=session.get("user_id", None),
     )
     camp.save()
     flash("The campground was added successfully", "success")
     return redirect(url_for("campgrounds.show_campground", camp_id=str(camp.id)))
+
 
 @bp.route("/<camp_id>", methods=["GET"])
 def show_campground(camp_id):
@@ -89,4 +92,3 @@ def edit_campground(camp_id):
 def new_campground():
     form = NewCampForm(request.form)
     return render_template("campgrounds/new.html", form=form)
-

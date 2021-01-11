@@ -63,7 +63,11 @@ def show_campground(camp_id):
 @campground_ownership_required
 def modify_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
-    image_results = upload_images_to_cloudinary(request.files)
+    try:
+        image_results = upload_images_to_cloudinary(request.files)
+    except:
+        flash("Something went wrong while uploading image", "error")
+        return redirect(url_for("campgrounds.edit_campground", camp_id=camp_id))
     if request.form["method"] == "put":
         camp.title = request.form.get("title", None)
         camp.location = request.form.get("location", None)

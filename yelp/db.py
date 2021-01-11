@@ -9,9 +9,6 @@ from seed.seedhelpers import descriptors, places
 from seed.cities import cities
 from yelp.models import campground, user, review
 
-sample = lambda array: array[random.randint(0, len(array) - 1)]
-
-
 def seed_db():
     user.User.drop_collection()
     review.Review.drop_collection()
@@ -20,11 +17,10 @@ def seed_db():
     user.User(email="fake@fake.com", username="fake", password=hashed_pw).save()
     author = user.User.objects.first()
     for i in range(50):
-        rando = random.randint(0, 1000)
-        city = cities[rando]["city"]
-        state = cities[rando]["state"]
-        descriptor = sample(descriptors)
-        place = sample(places)
+        city = random.choice(cities)["city"]
+        state = random.choice(cities)["state"]
+        descriptor = random.choice(descriptors)
+        place = random.choice(places)
         camp = campground.Campground(
             location=f"{city}, {state}",
             title=f"{descriptor} {place}",

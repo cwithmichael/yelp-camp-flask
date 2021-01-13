@@ -34,11 +34,11 @@ def campgrounds():
     for campground in campgrounds:
         campy = {
             "geometry": campground.geometry,
-            "properties":{
+            "properties": {
                 "title": campground.title,
                 "id": str(campground.id),
                 "description": campground.description,
-            }
+            },
         }
         campground_locs_with_props.append(campy)
     campgrounds_json = json.dumps({"features": campground_locs_with_props})

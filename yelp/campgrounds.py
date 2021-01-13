@@ -10,6 +10,9 @@ from flask import (
     session,
     url_for,
 )
+import wtforms
+import requests
+import json
 from cloudinary.uploader import upload
 from cloudinary.api import delete_resources
 from cloudinary.utils import cloudinary_url
@@ -17,7 +20,7 @@ from yelp.auth import login_required, campground_ownership_required
 from yelp.models.campground import Campground, Image
 from yelp.models.review import Review
 from yelp.forms.camp import NewCampForm, ReviewForm
-import wtforms
+
 
 bp = Blueprint("campgrounds", __name__, url_prefix="/campgrounds")
 
@@ -33,6 +36,7 @@ def campgrounds():
 def add_campground():
     upload_result = None
     image_results = upload_images_to_cloudinary(request.files)
+    geocoded = forward_geocode(request.form.get("location", None))
     camp = Campground(
         title=request.form.get("title", None),
         location=request.form.get("location", None),
@@ -40,6 +44,7 @@ def add_campground():
         description=request.form.get("description", None),
         price=request.form.get("price", None),
         author=session.get("user_id", None),
+        geometry=geocoded
     )
     camp.save()
     flash("The campground was added successfully", "success")
@@ -108,7 +113,13 @@ def new_campground():
     form = NewCampForm(request.form)
     return render_template("campgrounds/new.html", form=form)
 
-
+def forward_geocode(location):
+    token = 'pk.eyJ1IjoiY3dpdGhtaWNoYWVsIiwiYSI6ImNranUwemQwbjIxMWoyemszbDBvanJwN3kifQ.VTh7EYZxcDESBYUWoh35yw'
+    mapbox_url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{location}.json?access_token={token}"
+    #TODO: Add error handling :)
+    r = requests.get(mapbox_url)
+    return r.json().get("features")[0].get("geometry")
+    
 def upload_images_to_cloudinary(request_files):
     image_results = []
     for name, file in request_files.items(multi=True):

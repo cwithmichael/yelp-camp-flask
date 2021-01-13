@@ -12,8 +12,9 @@
       </div>
       <div class="mb-3">
 	<label for="location" class="form-label">Location</label>
-	{{ form.location(class_="form-control", required="") }}
+	{{ form.location(class_="form-control", required="", id="location") }}
       </div>
+      <div id="map" style="width: 400px; height: 300px;"></div>
       <div class="mb-3">
 	<label for="description" class="form-label">Description</label>
 	{{ form.description(class_="form-control", type="text", required="") }}
@@ -37,5 +38,4 @@
     <a href="/campgrounds"> All Campgrounds</a>
   </div>
 </div>
-
 {% endblock %}

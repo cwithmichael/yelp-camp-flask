@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/starability-heart.min.css')}}" type="text/css" media="screen" />
 <div class="row">
   <div class="col-6">
+
     <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
 	{% for idx in range(camp.images|count) %}
@@ -49,6 +50,7 @@
   </div><!-- col -->
 
   <div class="col-6">
+    <div id="map" style="width: 400px; height: 300px;"></div>
     {% if g.user %}
     <h2>Leave a Review</h2>
     <form action="/campgrounds/{{ camp.id }}/reviews" class="mb-3 validated-form" method="POST" novalidate>
@@ -95,4 +97,9 @@
     {% endfor %}
   </div>
 </div>
+<script>
+  const camp_location = {{ camp.geometry.coordinates }};
+  const camp_title = "{{ camp.title }}";
+</script>
+<script src={{ url_for('static', filename='js/map.js') }}></script> 
 {% endblock %}

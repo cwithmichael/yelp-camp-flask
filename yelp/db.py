@@ -34,6 +34,7 @@ def seed_db():
             description="This is a description.",
             price=(random.random() * 20) + 10,
             author=author.id,
+            geometry={"type": "Point", "coordinates": [-74.5, 40]}
         )
         camp.save()
 

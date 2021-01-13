@@ -13,7 +13,6 @@ class Image(me.EmbeddedDocument):
     filename = me.StringField(required=True)
     thumbnail_url = me.StringField(required=True)
 
-
 class Campground(me.Document):
     title = me.StringField(required=True, validation=_not_empty)
     images = me.ListField(me.EmbeddedDocumentField(Image))
@@ -22,3 +21,4 @@ class Campground(me.Document):
     location = me.StringField(required=True, validation=_not_empty)
     reviews = me.ListField(me.ReferenceField(Review))
     author = me.ReferenceField(User)
+    geometry = me.PointField()

@@ -9,10 +9,11 @@ from flask import (
     request,
     session,
     url_for,
+    json,
 )
+import os
 import wtforms
 import requests
-import json
 from cloudinary.uploader import upload
 from cloudinary.api import delete_resources
 from cloudinary.utils import cloudinary_url
@@ -28,7 +29,24 @@ bp = Blueprint("campgrounds", __name__, url_prefix="/campgrounds")
 @bp.route("/", methods=["GET"])
 def campgrounds():
     campgrounds = Campground.objects
-    return render_template("campgrounds/index.html", campgrounds=campgrounds)
+    campground_locs_with_props = []
+    # The code below is needed for cluster map popups
+    for campground in campgrounds:
+        campy = {
+            "geometry": campground.geometry,
+            "properties":{
+                "title": campground.title,
+                "id": str(campground.id),
+                "description": campground.description,
+            }
+        }
+        campground_locs_with_props.append(campy)
+    campgrounds_json = json.dumps({"features": campground_locs_with_props})
+    return render_template(
+        "campgrounds/index.html",
+        campgrounds=campgrounds,
+        campgrounds_json=campgrounds_json,
+    )
 
 
 @bp.route("", methods=["POST"])
@@ -44,7 +62,7 @@ def add_campground():
         description=request.form.get("description", None),
         price=request.form.get("price", None),
         author=session.get("user_id", None),
-        geometry=geocoded
+        geometry=geocoded,
     )
     camp.save()
     flash("The campground was added successfully", "success")
@@ -113,13 +131,15 @@ def new_campground():
     form = NewCampForm(request.form)
     return render_template("campgrounds/new.html", form=form)
 
+
 def forward_geocode(location):
-    token = 'pk.eyJ1IjoiY3dpdGhtaWNoYWVsIiwiYSI6ImNranUwemQwbjIxMWoyemszbDBvanJwN3kifQ.VTh7EYZxcDESBYUWoh35yw'
+    token = os.getenv("MAPBOX_TOKEN", None)
     mapbox_url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{location}.json?access_token={token}"
-    #TODO: Add error handling :)
+    # TODO: Add error handling :)
     r = requests.get(mapbox_url)
     return r.json().get("features")[0].get("geometry")
-    
+
+
 def upload_images_to_cloudinary(request_files):
     image_results = []
     for name, file in request_files.items(multi=True):

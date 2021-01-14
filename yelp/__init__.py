@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
-    app.config.from_mapping(SECRET_KEY=os.getenv("SECRET_KEY", b"_5#secret"))
+    app.config.from_mapping(SECRET_KEY=os.environ.get("SECRET_KEY", b"_5#secret"))
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -45,7 +45,7 @@ def create_app(test_config=None):
 
     @app.route("/")
     def index():
-        return redirect("/campgrounds")
+        return render_template("home.html")
 
     @app.errorhandler(mongoengine.errors.ValidationError)
     def handle_bad_mongo_validation(e):

@@ -23,3 +23,4 @@ build/
 auto-save-list
 .\#*
 
+.markdown-preview.html

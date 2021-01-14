@@ -6,39 +6,39 @@ The back-end has a few changes, but I tried to stay as faithul to the original c
 
 The original project can be found [here](https://github.com/Colt/YelpCamp).
 
-## Requirements
+## Requirements (Development)
 - Python 3.9.1
+
+- pipenv
 
 - Local MongoDB instance
 
 - [Free Cloudinary account](https://cloudinary.com/users/register/free) for uploading images
 
+- [Free mapbox account](https://www.mapbox.com/) for forward geocoding functionality
+
 ## Running it (On a *nix based OS)
 Make sure you have your local MongoDB instance running before starting the app.
 
-1. Create a virtual environment and activate it
+Make sure you have [pipenv installed](https://pipenv.pypa.io/en/latest/install/#installing-pipenv)
 
-`python -m venv venv`
+1.Run pipenv install
 
-`source venv/bin/activate`
+	pipenv install  
+2.Start the pipenv shell
 
-2. Install the requirements
+	pipenv shell  
+3.Export the Flask environment vars
 
-`pip install -r requirements.txt`
+	export FLASK_APP=yelp  
 
-3. Export the Flask environment vars
+	export FLASK_ENV=development  
+4.Seed the database
 
-`export FLASK_APP=yelp`
+	flask seed-db  
+5.Run the app
 
-`export FLASK_ENV=development`
-
-4. Seed the database
-
-`flask seed-db`
-
-5. Run the app
-
-`flask run`
+	flask run
 
 ## Using the app
 At this point you should be able to play around with the app. You'll need to either login or register to make changes to existing campgrounds or add new ones.
@@ -60,3 +60,8 @@ If you haven't run the app yet, then just create the folder yourself in the root
 And add the `CLOUDINARY_URL` api environment variable you got from Cloudinary to the `.env` file:
 
 `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>`
+
+## Adding your Mapbox token
+Modify the `.env` file inside of the `instance` folder by adding the line below:
+
+`MAPBOX_TOKEN=<YOUR_TOKEN>`

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Campgrounds{% endblock %}
 {% block content %}
-<div id="map" style="width: 100%; height: 500px"></div>
+<div id="cluster-map"></div>
 <h1>All Campgrounds</h1>
 <a href="/campgrounds/new">Add Campground</a>
 {% for campground in campgrounds %}

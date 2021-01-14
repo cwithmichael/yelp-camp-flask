@@ -2,11 +2,12 @@
     'use strict'
     mapboxgl.accessToken = 'pk.eyJ1IjoiY3dpdGhtaWNoYWVsIiwiYSI6ImNranUwemQwbjIxMWoyemszbDBvanJwN3kifQ.VTh7EYZxcDESBYUWoh35yw';
     var map = new mapboxgl.Map({
-	container: 'map',
+	container: 'show-map',
 	style: 'mapbox://styles/mapbox/streets-v11',
 	center: camp_location,
 	zoom: 9
     });
+    map.addControl(new mapboxgl.NavigationControl());
     new mapboxgl.Marker()
 	.setLngLat(camp_location)
 	.setPopup(

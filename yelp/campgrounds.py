@@ -37,8 +37,8 @@ def campgrounds():
             "properties": {
                 "title": campground.title,
                 "id": str(campground.id),
-                "description": campground.description,
-            },
+                "location": campground.location,
+                },
         }
         campground_locs_with_props.append(campy)
     campgrounds_json = json.dumps({"features": campground_locs_with_props})
@@ -133,7 +133,7 @@ def new_campground():
 
 
 def forward_geocode(location):
-    token = os.getenv("MAPBOX_TOKEN", None)
+    token = os.environ.get("MAPBOX_TOKEN", None)
     mapbox_url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{location}.json?access_token={token}"
     # TODO: Add error handling :)
     r = requests.get(mapbox_url)

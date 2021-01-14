@@ -50,7 +50,7 @@
   </div><!-- col -->
 
   <div class="col-6">
-    <div id="map" style="width: 400px; height: 300px;"></div>
+    <div id="show-map"></div>
     {% if g.user %}
     <h2>Leave a Review</h2>
     <form action="/campgrounds/{{ camp.id }}/reviews" class="mb-3 validated-form" method="POST" novalidate>

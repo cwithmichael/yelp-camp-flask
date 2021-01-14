@@ -1,10 +1,12 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiY3dpdGhtaWNoYWVsIiwiYSI6ImNranUwemQwbjIxMWoyemszbDBvanJwN3kifQ.VTh7EYZxcDESBYUWoh35yw';
 var map = new mapboxgl.Map({
-    container: 'map',
+    container: 'cluster-map',
     style: 'mapbox://styles/mapbox/light-v10',
     center: [-103.59179687498357, 40.66995747013945],
     zoom: 3
 });
+
+map.addControl(new mapboxgl.NavigationControl());
 
 map.on('load', function () {
     // Add a new source from our GeoJSON data and
@@ -43,11 +45,11 @@ map.on('load', function () {
 	    'circle-radius': [
 		'step',
 		['get', 'point_count'],
-		15,
-		10,
 		20,
+		10,
+		40,
 		30,
-		25
+		60
 	    ]
 	}
     });
@@ -70,8 +72,8 @@ map.on('load', function () {
 	source: 'campgrounds',
 	filter: ['!', ['has', 'point_count']],
 	paint: {
-	    'circle-color': '#11b4da',
-	    'circle-radius': 4,
+	    'circle-color': '#ffaaaa',
+	    'circle-radius': 6,
 	    'circle-stroke-width': 1,
 	    'circle-stroke-color': '#fff'
 	}
@@ -112,7 +114,7 @@ map.on('load', function () {
 	    .setLngLat(coordinates)
 	    .setHTML(
 		`<strong><a href="/campgrounds/${e.features[0].properties.id}">${e.features[0].properties.title}</a></srong>` +
-		`<p>${e.features[0].properties.description.substring(0, 20)}...</p>`
+		`<p>${e.features[0].properties.location}</p>`
 	    )
 	    .addTo(map);
     });

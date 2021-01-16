@@ -7,3 +7,11 @@
     width: 100%;
     height: 300px;
 }
+
+#index-h1 {
+    text-align: center;
+}
+
+#index-card {
+    background-color: #efefee;
+}

@@ -50,7 +50,8 @@ def add_review(camp_id):
 def modify_review(camp_id, review_id):
     camp = Campground.objects.get(id=camp_id)
     review = Review.objects.get(id=review_id)
-    if request.form["method"] == "delete":
+    review_form = ReviewForm()
+    if review_form.method.data == "DELETE" and review_form.validate_on_submit():
         camp.update(pull__reviews=review)
         review.delete()
         flash("Review deleted", "success")

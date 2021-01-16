@@ -4,47 +4,50 @@
 <div class="row mb-3">
   <h1 class="text-center">Edit Campground</h1>
   <div class="col-md-6 offset-md-3">
-    <form action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+    <form id="editForm" action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
       {{ form.csrf_token }}
-      <input type="hidden" name="method" value="put">
+      {{ form.method(value="PUT") }}
       <div class="mb-3">
-	<label for="title" class="form-label">Title</label>
-	{{ form.title(class_="form-control", value=camp.title, required="")  }}
+	{{ form.title.label(class_="form-label") }}
+	{{ form.title(class_="form-control", value=camp.title)  }}
       </div>
       <div class="mb-3">
-	<label for="location" class="form-label">Location</label>
-	{{ form.location(class_="form-control", value=camp.location, required="") }}
+	{{ form.location.label(class_="form-label") }}
+	{{ form.location(class_="form-control", value=camp.location) }}
       </div>
       <div class="mb-3">
-	<label for="description" class="form-label">Description</label>
-	{{ form.description(class_="form-control", id="desc", required="") }}
+	{{ form.description.label(class_="form-label") }}
+	{{ form.description(class_="form-control") }}
       </div>
       <div class="mb-3">
-	<label for="price" class="form-label">Campground Price</label>
+	{{ form.price.label(class_="form-label") }}
 	<div class="input-group">
 	  <span class="input-group-text" id="price-label">$</span>
-	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label", value=camp.price, required="") }}
+	  {{ form.price(class_="form-control", id_="price", value=camp.price) }}
 	</div>
       </div>
       <div class="mb-3">
-	<label for="image" class="form-label custom-file-label">Add image(s)...</label>
-	<input type="file" class="form-control" id="image" name="image" multiple>
+	{{ form.image.label(class_="form-label custom-file-label") }}
+	{{ form.image(class_="form-control") }}
       </div>
-      <div class="mb-3">
+      <div class="container mb-3">
+	<div class="row">
 	{% for idx in range(camp.images|count) %}
+	<div class="col-sm">
 	<img src="{{camp.images[idx].thumbnail_url}}" alt="" class="img-thumbnail">
 	<div class="form-check">
 	  <input class="form-check-input" type="checkbox" name="images_to_delete" value="{{camp.images[idx].filename}}" id="imageCheck" />
 	  <label class="form-check-label" for="imageCheck" for="">Delete?</label>
 	</div>
+	</div>
 	{% endfor %}
+	</div>
       </div>
       <div class="mb-3">
-	<button class="btn btn-success">Update Campground</button>
+	<button class="btn btn-success" >Update Campground</button>
       </div>
     </form>
     <a href="/campgrounds/{{ camp.id }}"> Back to Campground</a>
   </div>
 </div>
-<script>document.getElementById('desc').value="{{ camp.description }}";</script>
 {% endblock %}

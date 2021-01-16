@@ -38,7 +38,7 @@
       <div class="card-body">
 	<a class="card-link btn btn-info" href="/campgrounds/{{ camp.id }}/edit">Edit</a>
 	<form class="d-inline" action="/campgrounds/{{ camp.id }}" method="POST">
-	  <input type="hidden" name="method" value="delete">
+	  {{ show_form.method(value="DELETE") }}
 	  <button class="btn btn-danger">Delete</button>
 	</form>
       </div> <!-- card-body-->
@@ -88,7 +88,7 @@
 	<p class="card-text">Review: {{ review.body }}</p>
 	{% if g.user and review.author.id == g.user.id %}
 	<form action="/campgrounds/{{ camp.id }}/reviews/{{ review.id }}" method="POST">
-	  <input type="hidden" name="method" value="delete">
+	  {{ form.method(value="DELETE") }}
 	  <button class="btn btn-sm btn-danger">Delete</button>
 	</form>
 	{% endif %}

@@ -4,32 +4,31 @@
 <div class="row mb-3">
   <h1 class="text-center">Add a campground!</h1>
   <div class="col-md-6 offset-md-3">
-    <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+    <form action="/campgrounds/new" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
       {{ form.csrf_token }}
       <div class="mb-3">
-	<label for="title" class="form-label">Title</label>
-	{{ form.title(class_="form-control", required="")  }}
+	{{ form.title.label(class_="form-label") }}
+	{{ form.title(class_="form-control")  }}
       </div>
       <div class="mb-3">
-	<label for="location" class="form-label">Location</label>
-	{{ form.location(class_="form-control", required="", id="location") }}
+	{{ form.location.label(class_="form-label") }}
+	{{ form.location(class_="form-control") }}
       </div>
       <div class="mb-3">
-	<label for="description" class="form-label">Description</label>
-	{{ form.description(class_="form-control", type="text", required="") }}
+	{{ form.description.label(class_="form-label") }}
+	{{ form.description(class_="form-control") }}
       </div>
       <div class="mb-3">
-	<label for="price" class="form-label">Campground Price</label>
+	{{ form.price.label(class_="form-label") }}
 	<div class="input-group">
 	  <span class="input-group-text" id="price-label">$</span>
-	  {{ form.price(class_="form-control", id_="price", placeholder="0.00", aria_label="price", aria_describedby="price-label", required="") }}
+	  {{ form.price(class_="form-control", placeholder=0) }}
 	</div>
       </div>
       <div class="mb-3">
-	<label for="image" class="form-label custom-file-label">Choose image(s)...</label>
-	<input type="file" class="form-control" id="image" name="image" multiple>
+	{{ form.image.label(class_="form-label custom-file-label") }}
+	{{ form.image(class_="form-control") }}
       </div>
-
       <div class="mb-3">
 	<button class="btn btn-success">Add Campground</button>
       </div>

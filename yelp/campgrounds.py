@@ -10,6 +10,7 @@ from flask import (
     session,
     url_for,
     json,
+    current_app,
 )
 import os
 import wtforms
@@ -28,9 +29,17 @@ bp = Blueprint("campgrounds", __name__, url_prefix="/campgrounds")
 
 @bp.route("/", methods=["GET"])
 def campgrounds():
+    page = None
+    try:
+        page = int(request.args.get("page", 1))
+    except:
+        current_app.logger.exception("Something other than an int used for page number")
+        return render_template("error.html", error_message="Invalid Page Number")
+    paginated_campgrounds = Campground.objects.paginate(page=page, per_page=10)
+
+    # The code below is needed for cluster map popups
     campgrounds = Campground.objects
     campground_locs_with_props = []
-    # The code below is needed for cluster map popups
     for campground in campgrounds:
         campy = {
             "geometry": campground.geometry,
@@ -45,6 +54,7 @@ def campgrounds():
     return render_template(
         "campgrounds/index.html",
         campgrounds=campgrounds,
+        paginated_campgrounds=paginated_campgrounds,
         campgrounds_json=campgrounds_json,
     )
 

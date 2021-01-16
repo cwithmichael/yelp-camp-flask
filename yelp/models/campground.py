@@ -1,4 +1,4 @@
-import mongoengine as me
+from flask_mongoengine import MongoEngine
 from yelp.models.review import Review
 from yelp.models.user import User
 
@@ -6,6 +6,9 @@ from yelp.models.user import User
 def _not_empty(val):
     if not val:
         raise me.ValidationError("value can not be empty")
+
+
+me = MongoEngine()
 
 
 class Image(me.EmbeddedDocument):

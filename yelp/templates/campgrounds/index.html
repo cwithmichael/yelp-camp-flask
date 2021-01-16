@@ -9,9 +9,9 @@
     <div class="row">
       <div class="col-md-4">
 	{% if campground.images and campground.images|count >= 1 %}
-	<img alt="" src="{{ campground.images[0].thumbnail_url }}" width=200 height=200>
+	<img alt="" src="{{ campground.images[0].thumbnail_url }}" width=400 height=200>
 	{% else %}
-	<img alt="" src="https://source.unsplash.com/collection/483251" width=200 height=200>
+	<img alt="" src="https://source.unsplash.com/collection/483251" width=400 height=200>
 	{% endif %}
       </div>
       <div class="col-md-8">

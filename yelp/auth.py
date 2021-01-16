@@ -70,12 +70,10 @@ def login():
             flash("Registered Successfully - Welcome to Yelp Camp", "success")
         else:
             flash("Successfully logged in", "success")
-
-        if prev_view and prev_view != "register":
-            from urllib.parse import urlparse
-
-            parsed = urlparse(prev_view)
-            return redirect(parsed.path)
+            if prev_view != "register":
+                from urllib.parse import urlparse
+                parsed = urlparse(prev_view)
+                return redirect(url_for(f"campgrounds.{parsed.path}"))
         return redirect(url_for("campgrounds.campgrounds"))
     flash(error, "error")
     return redirect(url_for("auth.login"))
@@ -105,7 +103,7 @@ def login_required(view):
     def authentication_wrapped_view(**kwargs):
         if g.user is None:
             flash("You must be signed in to view this page.", "error")
-            session["prev_view"] = request.referrer
+            session["prev_view"] = view.__name__
             return redirect(url_for("auth.login"))
         return view(**kwargs)
 

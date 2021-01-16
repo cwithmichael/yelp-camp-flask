@@ -6,6 +6,7 @@ from wtforms import (
     TextAreaField,
     MultipleFileField,
     HiddenField,
+    RadioField,
 )
 from wtforms.validators import DataRequired, NumberRange, Regexp, StopValidation
 from wtforms.fields.html5 import IntegerRangeField
@@ -69,7 +70,18 @@ class CampForm(FlaskForm):
 
 
 class ReviewForm(FlaskForm):
-    rating = IntegerRangeField("Rating")
+    rating = RadioField(
+        "Rating",
+        choices=[
+            ("", "0 stars"),
+            ("1", "1 star"),
+            ("2", "2 stars"),
+            ("3", "3 stars"),
+            ("4", "4 stars"),
+            ("5", "5 stars"),
+        ],
+        validators=[DataRequired()],
+    )
     body = TextAreaField("Body", validators=[DataRequired()])
     method = HiddenField()
 

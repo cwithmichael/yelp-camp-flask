@@ -1,53 +1,53 @@
 {% extends "base.html" %}
 {% block title %}Edit Campground{% endblock %}
 {% block content %}
-<div class="row mb-3">
-  <h1 class="text-center">Edit Campground</h1>
-  <div class="col-md-6 offset-md-3">
-    <form id="editForm" action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
-      {{ form.csrf_token }}
-      {{ form.method(value="PUT") }}
-      <div class="mb-3">
-	{{ form.title.label(class_="form-label") }}
-	{{ form.title(class_="form-control", value=camp.title)  }}
-      </div>
-      <div class="mb-3">
-	{{ form.location.label(class_="form-label") }}
-	{{ form.location(class_="form-control", value=camp.location) }}
-      </div>
-      <div class="mb-3">
-	{{ form.description.label(class_="form-label") }}
-	{{ form.description(class_="form-control") }}
-      </div>
-      <div class="mb-3">
-	{{ form.price.label(class_="form-label") }}
-	<div class="input-group">
-	  <span class="input-group-text" id="price-label">$</span>
-	  {{ form.price(class_="form-control", id_="price", value=camp.price) }}
+  <div class="row mb-3">
+    <h1 class="text-center">Edit Campground</h1>
+    <div class="col-md-6 offset-md-3">
+      <form id="editForm" action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+	{{ form.csrf_token }}
+	{{ form.method(value="PUT") }}
+	<div class="mb-3">
+	  {{ form.title.label(class_="form-label") }}
+	  {{ form.title(class_="form-control", value=camp.title)  }}
 	</div>
-      </div>
-      <div class="mb-3">
-	{{ form.image.label(class_="form-label custom-file-label") }}
-	{{ form.image(class_="form-control") }}
-      </div>
-      <div class="container mb-3">
-	<div class="row">
-	{% for idx in range(camp.images|count) %}
-	<div class="col-sm">
-	<img src="{{camp.images[idx].thumbnail_url}}" alt="" class="img-thumbnail">
-	<div class="form-check">
-	  <input class="form-check-input" type="checkbox" name="images_to_delete" value="{{camp.images[idx].filename}}" id="imageCheck" />
-	  <label class="form-check-label" for="imageCheck" for="">Delete?</label>
+	<div class="mb-3">
+	  {{ form.location.label(class_="form-label") }}
+	  {{ form.location(class_="form-control", value=camp.location) }}
 	</div>
+	<div class="mb-3">
+	  {{ form.description.label(class_="form-label") }}
+	  {{ form.description(class_="form-control") }}
 	</div>
-	{% endfor %}
+	<div class="mb-3">
+	  {{ form.price.label(class_="form-label") }}
+	  <div class="input-group">
+	    <span class="input-group-text" id="price-label">$</span>
+	    {{ form.price(class_="form-control", id_="price", value=camp.price) }}
+	  </div>
 	</div>
-      </div>
-      <div class="mb-3">
-	<button class="btn btn-success" >Update Campground</button>
-      </div>
-    </form>
-    <a href="/campgrounds/{{ camp.id }}"> Back to Campground</a>
+	<div class="mb-3">
+	  {{ form.image.label(class_="form-label custom-file-label") }}
+	  {{ form.image(class_="form-control") }}
+	</div>
+	<div class="container mb-3">
+	  <div class="row">
+	    {% for idx in range(camp.images|count) %}
+	      <div class="col-sm">
+		<img src="{{camp.images[idx].thumbnail_url}}" alt="" class="img-thumbnail">
+		<div class="form-check">
+		  <input class="form-check-input" type="checkbox" name="images_to_delete" value="{{camp.images[idx].filename}}" id="imageCheck" />
+		  <label class="form-check-label" for="imageCheck" for="">Delete?</label>
+		</div>
+	      </div>
+	    {% endfor %}
+	  </div>
+	</div>
+	<div class="mb-3">
+	  <button class="btn btn-success" >Update Campground</button>
+	</div>
+      </form>
+      <a href="/campgrounds/{{ camp.id }}"> Back to Campground</a>
+    </div>
   </div>
-</div>
 {% endblock %}

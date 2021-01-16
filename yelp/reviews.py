@@ -22,25 +22,18 @@ bp = Blueprint("reviews", __name__, url_prefix="/campgrounds/<camp_id>/reviews")
 @bp.route("", methods=["POST"])
 @login_required
 def add_review(camp_id):
-    body = request.form["body"]
-    rating = request.form["rating"]
-    if not body or not rating:
-        flash("You can't submit an empty review or a review without a rating.", "error")
+    form = ReviewForm()
+    if form.validate_on_submit():
+        camp = Campground.objects.get(id=camp_id)
+        review = Review(body=form.body.data, rating=form.rating.data)
+        if g.user:
+            review.author = g.user.id
+        camp.reviews.append(review)
+        review.save()
+        camp.save()
+        flash("Review saved successfully", "success")
         return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
-
-    rating = int(rating)
-    if rating <= 0:
-        flash("Rating must be at least 1 star", "error")
-        return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
-
-    camp = Campground.objects.get(id=camp_id)
-    review = Review(body=request.form["body"], rating=request.form["rating"])
-    if g.user:
-        review.author = g.user.id
-    camp.reviews.append(review)
-    review.save()
-    camp.save()
-    flash("Review saved successfully", "success")
+    flash("Your review needs a star rating and text", "error")
     return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
 
 
@@ -51,8 +44,8 @@ def modify_review(camp_id, review_id):
     camp = Campground.objects.get(id=camp_id)
     review = Review.objects.get(id=review_id)
     review_form = ReviewForm()
-    if review_form.method.data == "DELETE" and review_form.validate_on_submit():
+    if review_form.method.data == "DELETE":
         camp.update(pull__reviews=review)
         review.delete()
-        flash("Review deleted", "success")
+    flash("Review deleted", "success")
     return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))

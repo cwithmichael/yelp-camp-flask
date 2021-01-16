@@ -1,39 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Add Campground{% endblock %}
 {% block content %}
-<div class="row mb-3">
-  <h1 class="text-center">Add a campground!</h1>
-  <div class="col-md-6 offset-md-3">
-    <form action="/campgrounds/new" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
-      {{ form.csrf_token }}
-      <div class="mb-3">
-	{{ form.title.label(class_="form-label") }}
-	{{ form.title(class_="form-control")  }}
-      </div>
-      <div class="mb-3">
-	{{ form.location.label(class_="form-label") }}
-	{{ form.location(class_="form-control") }}
-      </div>
-      <div class="mb-3">
-	{{ form.description.label(class_="form-label") }}
-	{{ form.description(class_="form-control") }}
-      </div>
-      <div class="mb-3">
-	{{ form.price.label(class_="form-label") }}
-	<div class="input-group">
-	  <span class="input-group-text" id="price-label">$</span>
-	  {{ form.price(class_="form-control", placeholder=0) }}
+  <div class="row mb-3">
+    <h1 class="text-center">Add a campground!</h1>
+    <div class="col-md-6 offset-md-3">
+      <form action="/campgrounds/new" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+	{{ form.csrf_token }}
+	<div class="mb-3">
+	  {{ form.title.label(class_="form-label") }}
+	  {{ form.title(class_="form-control")  }}
 	</div>
-      </div>
-      <div class="mb-3">
-	{{ form.image.label(class_="form-label custom-file-label") }}
-	{{ form.image(class_="form-control") }}
-      </div>
-      <div class="mb-3">
-	<button class="btn btn-success">Add Campground</button>
-      </div>
-    </form>
-    <a href="/campgrounds"> All Campgrounds</a>
+	<div class="mb-3">
+	  {{ form.location.label(class_="form-label") }}
+	  {{ form.location(class_="form-control") }}
+	</div>
+	<div class="mb-3">
+	  {{ form.description.label(class_="form-label") }}
+	  {{ form.description(class_="form-control") }}
+	</div>
+	<div class="mb-3">
+	  {{ form.price.label(class_="form-label") }}
+	  <div class="input-group">
+	    <span class="input-group-text" id="price-label">$</span>
+	    {{ form.price(class_="form-control", placeholder=0) }}
+	  </div>
+	</div>
+	<div class="mb-3">
+	  {{ form.image.label(class_="form-label custom-file-label") }}
+	  {{ form.image(class_="form-control") }}
+	</div>
+	<div class="mb-3">
+	  <button class="btn btn-success">Add Campground</button>
+	</div>
+      </form>
+      <a href="/campgrounds"> All Campgrounds</a>
+    </div>
   </div>
-</div>
 {% endblock %}

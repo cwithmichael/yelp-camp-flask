@@ -73,7 +73,8 @@ def login():
             if prev_view != "register":
                 from urllib.parse import urlparse
                 parsed = urlparse(prev_view)
-                return redirect(url_for(f"campgrounds.{parsed.path}"))
+                if parsed.path:
+                    return redirect(url_for(f"campgrounds.{parsed.path}"))
         return redirect(url_for("campgrounds.campgrounds"))
     flash(error, "error")
     return redirect(url_for("auth.login"))

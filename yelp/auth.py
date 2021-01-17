@@ -67,6 +67,7 @@ def login():
             prev_view = session.get("prev_view", None)
             session.clear()
             session["user_id"] = str(user.id)
+            session.permanent = True
 
             if prev_view == "register":
                 flash("Registered Successfully - Welcome to Yelp Camp", "success")

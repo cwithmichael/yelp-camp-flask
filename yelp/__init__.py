@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from flask import Flask
 from flask import request, url_for, redirect, render_template
 import mongoengine
@@ -8,7 +9,11 @@ from dotenv import load_dotenv
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
-    app.config.from_mapping(SECRET_KEY=os.environ.get("SECRET_KEY", b"_5#secret"))
+    app.config.from_mapping(
+        SECRET_KEY=os.environ.get("SECRET_KEY", b"_5#super-secret"),
+        # SESSION_COOKIE_SECURE = True,
+        PERMANENT_SESSION_LIFETIME=timedelta(hours=1),
+    )
 
     if test_config is None:
         # load the instance config, if it exists, when not testing

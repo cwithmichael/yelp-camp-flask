@@ -8,7 +8,13 @@ from wtforms import (
     HiddenField,
     RadioField,
 )
-from wtforms.validators import DataRequired, NumberRange, Regexp, StopValidation
+from wtforms.validators import (
+    InputRequired,
+    NumberRange,
+    Regexp,
+    StopValidation,
+    ValidationError,
+)
 from wtforms.fields.html5 import IntegerRangeField
 from collections.abc import Iterable
 
@@ -55,12 +61,12 @@ class MultiFileAllowed(object):
 
 
 class CampForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired()], id="title")
-    location = StringField("Location", validators=[DataRequired()], id="location")
+    title = StringField("Title", validators=[InputRequired()], id="title")
+    location = StringField("Location", validators=[InputRequired()], id="location")
     description = TextAreaField(
-        "Description", validators=[DataRequired()], id="description", default=""
+        "Description", validators=[InputRequired()], id="description", default=""
     )
-    price = DecimalField("Price", validators=[DataRequired()], id="price")
+    price = DecimalField("Price", validators=[InputRequired()], id="price")
     image = MultipleFileField(
         "Add Image(s)",
         validators=[MultiFileAllowed(["jpg", "png", "bmp", ""])],
@@ -80,9 +86,9 @@ class ReviewForm(FlaskForm):
             ("4", "4 stars"),
             ("5", "5 stars"),
         ],
-        validators=[DataRequired()],
+        validators=[InputRequired()],
     )
-    body = TextAreaField("Body", validators=[DataRequired()])
+    body = TextAreaField("Body", validators=[InputRequired()])
     method = HiddenField()
 
 

@@ -4,15 +4,15 @@ from wtforms import (
     PasswordField,
 )
 from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import InputRequired, Length
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()], id="username")
+    username = StringField("Username", validators=[InputRequired()], id="username")
     password = PasswordField(
-        "Password", validators=[DataRequired(), Length(min=3)], id="password"
+        "Password", validators=[InputRequired(), Length(min=3)], id="password"
     )
 
 
 class RegisterForm(LoginForm):
-    email = EmailField("Email", validators=[DataRequired()], id="email")
+    email = EmailField("Email", validators=[InputRequired()], id="email")

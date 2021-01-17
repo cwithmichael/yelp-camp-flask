@@ -137,9 +137,6 @@ def new_campground():
         camp.save()
         flash("The campground was added successfully", "success")
         return redirect(url_for("campgrounds.show_campground", camp_id=str(camp.id)))
-    for field, errors in form.errors.items():
-        if "image" in field.lower():
-            flash(f"Something went wrong uploading your image(s): {errors[0]}", "error")
     return render_template("campgrounds/new.html", form=form)
 
 

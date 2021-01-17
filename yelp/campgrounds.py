@@ -10,6 +10,7 @@ from flask import (
     session,
     url_for,
     json,
+    jsonify,
     current_app,
 )
 import os
@@ -50,7 +51,7 @@ def campgrounds():
             },
         }
         campground_locs_with_props.append(campy)
-        campgrounds_json = json.dumps({"features": campground_locs_with_props})
+        campgrounds_json = json.htmlsafe_dumps({"features": campground_locs_with_props})
     return render_template(
         "campgrounds/index.html",
         campgrounds=campgrounds,

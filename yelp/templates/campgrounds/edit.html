@@ -4,7 +4,16 @@
   <div class="row mb-3">
     <h1 class="text-center">Edit Campground</h1>
     <div class="col-md-6 offset-md-3">
-      <form id="editForm" action="/campgrounds/{{ camp.id }}" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+      {% if form.errors %}
+	{% for field in form %}
+	  {% for error in field.errors %}
+	    <div class="alert alert-danger">
+	      {{field.label}} : {{ error }}
+	    </div>
+	  {% endfor %}
+	{% endfor %}
+      {% endif %}
+      <form id="editForm" action="/campgrounds/{{ camp.id }}/edit" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
 	{{ form.csrf_token }}
 	{{ form.method(value="PUT") }}
 	<div class="mb-3">

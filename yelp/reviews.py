@@ -34,6 +34,7 @@ def add_review(camp_id):
         flash("Review saved successfully", "success")
         return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
     flash("Your review needs a star rating and text", "error")
+    session["review_body"] = form.body.data
     return redirect(url_for("campgrounds.show_campground", camp_id=camp_id))
 
 

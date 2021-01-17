@@ -63,24 +63,27 @@ def campgrounds():
 @bp.route("/<camp_id>", methods=["GET"])
 def show_campground(camp_id):
     camp = None
+    prev_body = session.get("review_body", None)
+    if prev_body:
+        session.pop("review_body")
     try:
         camp = Campground.objects.get(id=camp_id)
     except:
         flash("Cannot find that campground", "error")
         return redirect(url_for("campgrounds.campgrounds"))
-    form = ReviewForm()
+    review_form = ReviewForm(body=prev_body)
     show_form = ShowForm()
     return render_template(
-        "campgrounds/show.html", camp=camp, form=form, show_form=show_form
+        "campgrounds/show.html", camp=camp, form=review_form, show_form=show_form
     )
 
 
-@bp.route("/<camp_id>", methods=["POST", "PUT", "DELETE"])
+@bp.route("/<camp_id>/edit", methods=["GET", "POST", "PUT", "DELETE"])
 @login_required
 @campground_ownership_required
 def modify_campground(camp_id):
     camp = Campground.objects.get(id=camp_id)
-    form = CampForm()
+    form = CampForm(description=camp.description)
     show_form = ShowForm()
     if form.method.data == "PUT" and form.validate_on_submit():
         try:
@@ -104,21 +107,13 @@ def modify_campground(camp_id):
         return redirect(
             url_for("campgrounds.show_campground", camp_id=camp_id), code=303
         )
-    elif show_form.method.data == "DELETE":
+    if show_form.method.data == "DELETE":
         for review in camp.reviews:
             review.delete()
         camp.delete()
         flash("Campground deleted", "success")
         return redirect(url_for("campgrounds.campgrounds"))
-    return render_template("error.html", error_message="Bad Request"), 400
 
-
-@bp.route("/<camp_id>/edit")
-@login_required
-@campground_ownership_required
-def edit_campground(camp_id):
-    camp = Campground.objects.get(id=camp_id)
-    form = CampForm(description=camp.description)
     return render_template("campgrounds/edit.html", camp=camp, form=form)
 
 

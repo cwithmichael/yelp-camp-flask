@@ -37,6 +37,7 @@ def campgrounds():
         current_app.logger.exception("Something other than an int used for page number")
         return render_template("error.html", error_message="Invalid Page Number")
     paginated_campgrounds = Campground.objects.paginate(page=page, per_page=10)
+    campgrounds_json = None
 
     # The code below is needed for cluster map popups
     campgrounds = Campground.objects

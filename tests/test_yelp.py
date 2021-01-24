@@ -1,11 +1,9 @@
-import os
 import pytest
-from unittest.mock import patch
-import unittest
 from yelp import create_app
 from yelp.db import init_app, seed_db
 from yelp.models.campground import Campground
 from mongoengine import disconnect
+
 
 @pytest.fixture
 def app():

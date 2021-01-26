@@ -4,29 +4,27 @@ from flask import Flask
 from flask import request, url_for, redirect, render_template
 import mongoengine
 from dotenv import load_dotenv
-from config import DevelopmentConfig, TestingConfig, ProductionConfig
 
 
 def create_app(testing=False):
     app = Flask(__name__, instance_relative_config=True)
-    # load the environment vars
-    load_dotenv(dotenv_path=Path(app.instance_path) / ".env")
-    flask_environment = os.environ.get("FLASK_ENV", "development")
-    if not testing:
-        # Check to see if dev or prod
-        if "development" == flask_environment:
-            app.config.from_object("config.DevelopmentConfig")
-        elif "production" == flask_environment:
-            app.config.from_object("config.ProductionConfig")
-    else:
-        # load the test config
-        app.config.from_object("config.TestingConfig")
 
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    load_dotenv(dotenv_path=Path(app.instance_path) / ".env")
+    from config import Config
+
+    if not testing:
+        if "development" == Config.ENVIRONMENT:
+            app.config.from_object("config.DevelopmentConfig")
+        elif "production" == Config.ENVIRONMENT:
+            app.config.from_object("config.ProductionConfig")
+    else:
+        app.config.from_object("config.TestingConfig")
 
     from . import db
 

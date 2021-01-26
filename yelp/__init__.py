@@ -1,36 +1,32 @@
 import os
-from datetime import timedelta
+from pathlib import Path
 from flask import Flask
 from flask import request, url_for, redirect, render_template
 import mongoengine
 from dotenv import load_dotenv
+from config import DevelopmentConfig, TestingConfig, ProductionConfig
 
 
-def create_app(test_config=None):
+def create_app(testing=False):
     app = Flask(__name__, instance_relative_config=True)
-
-    app.config.from_mapping(
-        SECRET_KEY=os.environ.get("SECRET_KEY", b"_5#super-secret"),
-        # SESSION_COOKIE_SECURE = True,
-        PERMANENT_SESSION_LIFETIME=timedelta(hours=1),
-    )
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile("config.py", silent=True)
+    # load the environment vars
+    load_dotenv(dotenv_path=Path(app.instance_path) / ".env")
+    flask_environment = os.environ.get("FLASK_ENV", "development")
+    if not testing:
+        # Check to see if dev or prod
+        if "development" == flask_environment:
+            app.config.from_object("config.DevelopmentConfig")
+        elif "production" == flask_environment:
+            app.config.from_object("config.ProductionConfig")
     else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+        # load the test config
+        app.config.from_object("config.TestingConfig")
 
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
-    # load the environment vars
-    from pathlib import Path
-
-    load_dotenv(dotenv_path=Path(app.instance_path) / ".env")
 
     from . import db
 

@@ -7,13 +7,7 @@ from mongoengine import disconnect
 
 @pytest.fixture
 def app():
-    app = create_app(
-        {
-            "TESTING": True,
-            "WTF_CSRF_ENABLED": False,
-            "MONGODB_SETTINGS": {"host": "mongomock://localhost"},
-        }
-    )
+    app = create_app(testing=True)
     with app.app_context():
         init_app(app)
         seed_db()

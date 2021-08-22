@@ -6,6 +6,12 @@ The back-end has a few changes, but I tried to stay as faithul to the original c
 
 The original project can be found [here](https://github.com/Colt/YelpCamp).
 
+## Example screenshots
+
+<img width="1679" alt="Screen Shot 2021-08-22 at 3 48 44 PM" src="https://user-images.githubusercontent.com/1703143/130369675-dbe98f08-21e5-46ae-bcea-4ec4651618a2.png">
+
+<img width="1679" alt="Screen Shot 2021-08-22 at 3 50 23 PM" src="https://user-images.githubusercontent.com/1703143/130369697-b4d501d8-5969-4882-92b5-9f74792ebdc1.png">
+
 ## Requirements (Development)
 - Python 3.9.1
 

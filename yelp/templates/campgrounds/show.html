@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Show{% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/starability-heart.min.css')}}" type="text/css"
-	media="screen" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/starability-heart.min.css')}}" type="text/css" media="screen" />
 <div class="row">
 	<div class="col-6">
 		<div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
 			<div class="carousel-inner">
 				{% for idx in range(camp.images|count) %}
 				<div class="carousel-item {% if idx == 0 %}active{% endif %}">
-					<img src="{{camp.images[idx].url}}" class="d-block w-100" alt="{{camp.images[idx].filename}}"
-						width=400 height=400>
+					<img src="{{camp.images[idx].url}}" class="d-block w-100" alt="{{camp.images[idx].filename}}" width=400 height=400>
 				</div>
 				{% endfor %}
 			</div>

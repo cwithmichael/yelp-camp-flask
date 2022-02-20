@@ -1,114 +1,116 @@
 {% extends "base.html" %}
 {% block title %}Show{% endblock %}
 {% block content %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/starability-heart.min.css')}}" type="text/css" media="screen" />
-  <div class="row">
-    <div class="col-6">
-      <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
-	<div class="carousel-inner">
-	  {% for idx in range(camp.images|count) %}
-	    <div class="carousel-item {% if idx == 0 %}active{% endif %}">
-	      <img src="{{camp.images[idx].url}}" class="d-block w-100" alt="{{camp.images[idx].filename}}" width=400 height=400>
-	    </div>
-	  {% endfor %}
-	</div>
-	{% if camp.images|count > 1 %}
-	  <a class="carousel-control-prev" href="#campgroundCarousel" role="button" data-bs-slide="prev">
-	    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-	    <span class="visually-hidden">Previous</span>
-	  </a>
-	  <a class="carousel-control-next" href="#campgroundCarousel" role="button" data-bs-slide="next">
-	    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-	    <span class="visually-hidden">Next</span>
-	  </a>
-	{% endif %}
-      </div>
-      <div class="card mb-3">
-	<div class="card-body">
-	  <h5 class="card-title">{{ camp.title }}</h5>
-	  <p class="card-text"> {{ camp.description }} </p>
-	</div>
-	<ul class="list-group list-group-flush">
-	  <li class="list-group-item text-muted"> {{ camp.location }}</li>
-	  <li class="list-group-item"> Submitted by: {{ camp.author.username }}</li>
-	  <li class="list-group-item">${{ camp.price }}/night</li>
-	</ul>
-	{% if g.user and camp.author.id == g.user.id %}
-	  <div class="card-body">
-	    <a class="card-link btn btn-info" href="/campgrounds/{{ camp.id }}/edit">Edit</a>
-	    <form class="d-inline" action="/campgrounds/{{ camp.id }}" method="POST">
-	      {{ show_form.method(value="DELETE") }}
-	      <button class="btn btn-danger">Delete</button>
-	    </form>
-	  </div> <!-- card-body-->
-	{% endif %}
-	<div class="card-footer text-muted">
-	  2 days ago
-	</div> <!-- card-footer-->
-      </div><!-- card-->
-    </div><!-- col -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/starability-heart.min.css')}}" type="text/css"
+	media="screen" />
+<div class="row">
+	<div class="col-6">
+		<div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				{% for idx in range(camp.images|count) %}
+				<div class="carousel-item {% if idx == 0 %}active{% endif %}">
+					<img src="{{camp.images[idx].url}}" class="d-block w-100" alt="{{camp.images[idx].filename}}"
+						width=400 height=400>
+				</div>
+				{% endfor %}
+			</div>
+			{% if camp.images|count > 1 %}
+			<a class="carousel-control-prev" href="#campgroundCarousel" role="button" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</a>
+			<a class="carousel-control-next" href="#campgroundCarousel" role="button" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</a>
+			{% endif %}
+		</div>
+		<div class="card mb-3">
+			<div class="card-body">
+				<h5 class="card-title">{{ camp.title }}</h5>
+				<p class="card-text"> {{ camp.description }} </p>
+			</div>
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item text-muted"> {{ camp.location }}</li>
+				<li class="list-group-item"> Submitted by: {{ camp.author.username }}</li>
+				<li class="list-group-item">${{ camp.price }}/night</li>
+			</ul>
+			{% if g.user and camp.author.id == g.user.id %}
+			<div class="card-body">
+				<a class="card-link btn btn-info" href="/campgrounds/{{ camp.id }}/edit">Edit</a>
+				<form class="d-inline" action="/campgrounds/{{ camp.id }}" method="POST">
+					{{ show_form.method(value="DELETE") }}
+					<button class="btn btn-danger">Delete</button>
+				</form>
+			</div> <!-- card-body-->
+			{% endif %}
+			<div class="card-footer text-muted">
+				2 days ago
+			</div> <!-- card-footer-->
+		</div><!-- card-->
+	</div><!-- col -->
 
-    <div class="col-6">
-      <div id="show-map"></div>
-      {% if g.user %}
-	<h2 class="mt-3">Leave a Review</h2>
-	{% if form.errors %}
-	  {% for field in form %}
-	    {% for error in field.errors %}
-	      <div class="alert alert-danger">
-		{{field.label}} : {{ error }}
-	      </div>
-	    {% endfor %}
-	  {% endfor %}
-	{% endif %}
-
-	<form action="/campgrounds/{{ camp.id }}/reviews" class="mb-3 validated-form" method="POST" novalidate>
-	  {{ form.csrf_token }}
-	  <div>
-	    <fieldset class="starability-heart">
-	      {% for subfield in form.rating %}
-		{% if subfield.id == "rating-0" %}
-		  {{ subfield(class_="input-no-rate", id="no-rate", value="", checked=true) }}
-		{% else %}
-		  {{ subfield(required=true) }}
-		  {{ subfield.label }}
+	<div class="col-6">
+		<div id="show-map"></div>
+		{% if g.user %}
+		<h2 class="mt-3">Leave a Review</h2>
+		{% if form.errors %}
+		{% for field in form %}
+		{% for error in field.errors %}
+		<div class="alert alert-danger">
+			{{field.label}} : {{ error }}
+		</div>
+		{% endfor %}
+		{% endfor %}
 		{% endif %}
-	      {% endfor %}
-	    </fieldset>
-	  </div>
-	  <div class="mb-3">
-	    {{ form.body.label(class_="form-label") }}
-	    {{ form.body(class_="form-control", id="body", cols=30, rows=3) }}
-	  </div>
-	  <div class="valid-feedback">
-	    Looks Good!
-	  </div>
-	  <div class="invalid-feedback">
-	    You need to enter review text and leave a star rating
-	  </div>
-	  <button class="btn btn-success">Submit</button>
-	</form>
-      {% endif %}
-      {% for review in camp.reviews %}
-	<div class="card mb-3">
-	  <div class="card-body">
-	    <p class="card-title">Author: {{ review.author.username }}</p>
-	    <p class="starability-result" data-rating="{{ review. rating }}">
-	    <p class="card-text">Review: {{ review.body }}</p>
-	    {% if g.user and review.author.id == g.user.id %}
-	      <form action="/campgrounds/{{ camp.id }}/reviews/{{ review.id }}" method="POST">
-		{{ form.method(value="DELETE") }}
-		<button class="btn btn-sm btn-danger">Delete</button>
-	      </form>
-	    {% endif %}
-	  </div>
+
+		<form action="/campgrounds/{{ camp.id }}/reviews" class="mb-3 validated-form" method="POST" novalidate>
+			{{ form.csrf_token }}
+			<div>
+				<fieldset class="starability-heart">
+					{% for subfield in form.rating %}
+					{% if subfield.id == "rating-0" %}
+					{{ subfield(class_="input-no-rate", id="no-rate", value="", checked=true) }}
+					{% else %}
+					{{ subfield(required=true) }}
+					{{ subfield.label }}
+					{% endif %}
+					{% endfor %}
+				</fieldset>
+			</div>
+			<div class="mb-3">
+				{{ form.body.label(class_="form-label") }}
+				{{ form.body(class_="form-control", id="body", cols=30, rows=3) }}
+			</div>
+			<div class="valid-feedback">
+				Looks Good!
+			</div>
+			<div class="invalid-feedback">
+				You need to enter review text and leave a star rating
+			</div>
+			<button class="btn btn-success">Submit</button>
+		</form>
+		{% endif %}
+		{% for review in camp.reviews %}
+		<div class="card mb-3">
+			<div class="card-body">
+				<p class="card-title">Author: {{ review.author.username }}</p>
+				<p class="starability-result" data-rating="{{ review. rating }}">
+				<p class="card-text">Review: {{ review.body }}</p>
+				{% if g.user and review.author.id == g.user.id %}
+				<form action="/campgrounds/{{ camp.id }}/reviews/{{ review.id }}" method="POST">
+					{{ form.method(value="DELETE") }}
+					<button class="btn btn-sm btn-danger">Delete</button>
+				</form>
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
 	</div>
-      {% endfor %}
-    </div>
-  </div>
-  <script>
-    const camp_location = {{ camp.geometry.coordinates }};
-    const camp_title = "{{ camp.title }}";
-  </script>
-  <script src={{ url_for('static', filename='js/show_map.js') }}></script> 
+</div>
+<script>
+	const camp_location = {{ camp.geometry.coordinates }};
+	const camp_title = "{{ camp.title }}";
+</script>
+<script src={{ url_for('static', filename='js/show_map.js' ) }} tok={{ mapbox_token }}></script>
 {% endblock %}

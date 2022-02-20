@@ -58,6 +58,7 @@ def campgrounds():
         campgrounds=campgrounds,
         paginated_campgrounds=paginated_campgrounds,
         campgrounds_json=campgrounds_json,
+        mapbox_token=os.environ.get("MAPBOX_TOKEN"),
     )
 
 
@@ -75,7 +76,11 @@ def show_campground(camp_id):
     review_form = ReviewForm(body=prev_body)
     show_form = ShowForm()
     return render_template(
-        "campgrounds/show.html", camp=camp, form=review_form, show_form=show_form
+        "campgrounds/show.html",
+        camp=camp,
+        form=review_form,
+        show_form=show_form,
+        mapbox_token=os.environ.get("MAPBOX_TOKEN"),
     )
 
 
